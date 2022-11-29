@@ -106,6 +106,70 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.post("/restsignup1", (req, res) => {
+  
+  const restaurantname = req.body.restaurantname;
+  const email = req.body.email;
+  const password = req.body.password;
+  const phone = req.body.phone;
+  
+  db.connect((error) => {
+    if (!error) {
+      db.query(
+        
+        "INSERT INTO RESTAURANT (REST_NAME) VALUES (?); INSERT INTO R_CONTACT (PHONE_NO, EMAIL, PASSWORD) VALUES (?, ?, ?);",
+        [restaurantname, phone, email, password],
+        (err, result) => {
+          if (err) {
+            res.send({ err: err });
+          } else {
+            if (result.length > 0) {
+              res.send({message: "Information Saved"});
+            } else {
+              res.send({ message: "Unable to save the info"});
+            }
+          }
+        }
+      );
+    } else {
+      console.log("Connection failed");
+      console.log(error);
+    }
+  });
+  // db.end();
+});
+
+app.post("/restsignup2", (req, res) => {
+  
+  const city = req.body.city;
+  const area = req.body.area;
+  const street = req.body.street;
+  const building = req.body.building;
+  
+  db.connect((error) => {
+    if (!error) {
+      db.query(
+        "INSERT INTO R_LOCATION (CITY, AREA, STREET BUILDING) VALUES (?, ?, ?, ?);",
+        [city, area, street, building],
+        (err, result) => {
+          if (err) {
+            res.send({ err: err });
+          } else {
+            if (result.length > 0) {
+              res.send({message: "Information Saved"});
+            } else {
+              res.send({ message: "Unable to save the info"});
+            }
+          }
+        }
+      );
+    } else {
+      console.log("Connection failed");
+      console.log(error);
+    }
+  });
+  // db.end();
+});
 app.post("/search", (req, res) => {
   const restaurant = req.body.restaurant;
 
@@ -484,8 +548,6 @@ app.post("/confirmorder", (req, res) => {
   
   const order = req.body.order;
   
-  
-  
   db.connect((error) => {
     if (!error) {
       db.query(
@@ -511,6 +573,35 @@ app.post("/confirmorder", (req, res) => {
   // db.end();
 });
 
+
+app.post("/deliverorder", (req, res) => {
+  
+  const order = req.body.order;
+  
+  db.connect((error) => {
+    if (!error) {
+      db.query(
+        "UPDATE ORDER SET STATUS = 'COMPLETED' WHERE ORDER_ID = ?"
+        [order],
+        (err, result) => {
+          if (err) {
+            res.send({ err: err });
+          } else {
+            if (result.length > 0) {
+              res.send({ message: "status updated" });
+            } else {
+              res.send({ message: "unable to update status" });
+            }
+          }
+        }
+      );
+    } else {
+      console.log("Connection failed");
+      console.log(error);
+    }
+  });
+  // db.end();
+});
 app.post("/orderhistory", (req, res) => {
   
   const cust = req.body.cust;
