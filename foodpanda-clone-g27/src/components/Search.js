@@ -20,6 +20,7 @@ const obj = {r_name}
         restaurant : restaurant
     }).then((response) => {
     // set the searchResults state to the response.data
+    
     console.log("here",response.data[0].email)
     setSearchResults([...searchResults, response.data[0].RESTAURANT]);
     console.log("search res",searchResults)    
