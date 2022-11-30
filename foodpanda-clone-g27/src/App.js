@@ -11,6 +11,7 @@ import { DetailChange } from './components/DetailChange';
 import { AddressChange } from './components/AddressChange';
 import { LandingPageCustomer } from './components/LandingPageCustomer';
 import { LandingPageRestaurant } from './components/LandingPageRestaurant';
+import {SelectOrder} from './components/SelectOrder';
 import Welcome from './components/Welcome';
 
 
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/selectuser" element={<SelectUser />} />
         <Route path="/landingpagecustomer" element={<LandingPageCustomer />} />
         <Route path="/landingpagerestaurant" element={<LandingPageRestaurant />} />
+        <Route path="/selectorder" element={<SelectOrder />} />
       </Routes>
     </Router>
   );
