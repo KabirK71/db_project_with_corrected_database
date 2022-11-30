@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import Axios from 'axios';
+// import React, {useState} from 'react';
+// import Axios from 'axios';
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
@@ -10,8 +10,11 @@ import { Search } from './components/Search';
 import { DetailChange } from './components/DetailChange';  
 import { AddressChange } from './components/AddressChange';
 import { LandingPageCustomer } from './components/LandingPageCustomer';
-import { LandingPageRestaurant } from './components/LandingPageRestaurant';
-import {SelectOrder} from './components/SelectOrder';
+import { VoucherGenerate } from './components/VoucherGenerate';
+import { DisplayOrdersRestaurant } from './components/DisplayOrdersRestaurant'
+import { COrderHistory } from './components/COrderHistory'
+
+
 import Welcome from './components/Welcome';
 
 
@@ -23,12 +26,14 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/detailchange" element={<DetailChange />} />
+        <Route path="/updatepassword" element={<DetailChange />} />
         <Route path="/addresschange" element={<AddressChange />} />
         <Route path="/selectuser" element={<SelectUser />} />
         <Route path="/landingpagecustomer" element={<LandingPageCustomer />} />
-        <Route path="/landingpagerestaurant" element={<LandingPageRestaurant />} />
-        <Route path="/selectorder" element={<SelectOrder />} />
+        <Route path="/vouchergenerate" element={<VoucherGenerate />} />
+        <Route path="/displayordersrestaurant" element={<DisplayOrdersRestaurant />} />
+        <Route path="/customerorderhistory" element={<COrderHistory />} />
+
       </Routes>
     </Router>
   );
