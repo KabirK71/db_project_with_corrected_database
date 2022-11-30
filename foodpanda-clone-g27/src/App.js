@@ -10,6 +10,7 @@ import { Search } from './components/Search';
 import { DetailChange } from './components/DetailChange';  
 import { AddressChange } from './components/AddressChange';
 import { LandingPageCustomer } from './components/LandingPageCustomer';
+import { LandingPageRestaurant } from './components/LandingPageRestaurant';
 import Welcome from './components/Welcome';
 
 
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/addresschange" element={<AddressChange />} />
         <Route path="/selectuser" element={<SelectUser />} />
         <Route path="/landingpagecustomer" element={<LandingPageCustomer />} />
+        <Route path="/landingpagerestaurant" element={<LandingPageRestaurant />} />
       </Routes>
     </Router>
   );

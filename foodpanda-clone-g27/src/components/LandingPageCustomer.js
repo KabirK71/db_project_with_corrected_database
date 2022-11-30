@@ -3,20 +3,36 @@ import { useState, useEffect } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo_svg.svg";
+import { Search } from "./Search";
 
 export const LandingPageCustomer = () => {
-  const [searchResults, setSearchResults] = useState([]);
+  // const [searchResults, setSearchResults] = useState([]);
 
-  useEffect(() => {
-    Axios.post("http://localhost:5000/landingpageforcustomers").then((response) => {
-      console.log(response);
-      console.log("rendered");
-      setSearchResults([...searchResults, response.data[0]]);
-    });
-  }, []);
+  // useEffect(() => {
+  //   Axios.post("http://localhost:5000/landingpageforcustomers").then((response) => {
+  //     console.log(response);
+  //     console.log("rendered");
+  //     setSearchResults([...searchResults, response.data[0]]);
+  //   });
+  // }, []);
+
+  var searchResults = [{ CUISINES: "CHINESE", DELIVERY_FEE: 50, DISCOUNT: 0, PRICE_RATING: "$$", REST_ID: 1, REST_NAME: "Chop Chop", REST_RATING: 5 },{ CUISINES: "PAKISTANI", DELIVERY_FEE: 100, DISCOUNT: 20, PRICE_RATING: "$", REST_ID: 2, REST_NAME: "Karachi Hot & Spicy", REST_RATING: 4 },{ CUISINES: "ITALIAN", DELIVERY_FEE: 150, DISCOUNT: 30, PRICE_RATING: "$$$", REST_ID: 3, REST_NAME: "Pasta La Vista", REST_RATING: 3},
+  ];
+
+  const restList = searchResults.map((item, index) => (
+      <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 " key={index}>
+        <button class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white hover:bg-gray-50">
+          <p href="" class="mb-4 text-md font-semibold">{item.REST_NAME}</p>       
+          <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Cuisine: {item.CUISINES}</p>
+          <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Delivery fee: {item.DELIVERY_FEE}</p>
+          <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Discount: {item.DISCOUNT}%</p>
+          <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Price Rating: {item.PRICE_RATING}</p>
+        </button>
+      </div>
+  ));
 
   return (
-    <div className="LandingPageForCustomers">
+    <div className="LandingPageForCustomers" class="bg-white dark:bg-gray-900 ">
       <header>
         <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
           <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
@@ -55,15 +71,23 @@ export const LandingPageCustomer = () => {
           </div>
         </nav>
       </header>
+      <section class="bg-white dark:bg-gray-900 justify-items-center py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+        <div class="max-w-screen justify-center py-5">
+          <Search />
+        </div>
+        <div class ="flex flex-col">
+          <h2 class="mx-auto max-w-screen-md text-center font-semibold mt-2 text-lg lg:mb-12">Restaurants Available Near You</h2>  
+          <div>{restList}</div>
+        </div>
+      </section>
 
-      <label>Restaurants available near you</label>
-      {searchResults.map((obj) => {
-        return (
-          <div>
-            <h1>{obj}</h1>
-          </div>
-        );
-      })}
     </div>
   );
 };
+// {searchResults.map((obj) => {
+//   return (
+//     <div>
+//       <h1>{obj}</h1>
+//     </div>
+//   );
+// })}

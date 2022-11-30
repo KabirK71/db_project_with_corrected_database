@@ -29,18 +29,18 @@ const obj = {r_name}
   };
 
     return (
-    <div className="search">
-        <h1>search</h1>
-        <label>Search</label>
-        <input type="text" name="search" placeholder="enter a cuisine type or a restaurant name" onChange = {(e)=> {setRestaurant(e.target.value)}}/>
-        <button onClick={search}>Search</button>
-        {searchResults.map((obj) => {
-            return (
-                <div>
-                    <h1>{obj}</h1>
-                    </div>
-            )
-        })}
+    <div className="search" class="flex items-center">
+      <div class="relative w-full px-2">
+        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" name="search" placeholder="Enter a cuisine type or a restaurant name" onChange = {(e)=> {setRestaurant(e.target.value)}}/>
+      </div>
+      <button onClick={search} class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm p-2.5 text-center dark:text-white  dark:focus:ring-primary-900">Search</button>
+          {searchResults.map((obj) => {
+              return (
+                  <div>
+                      <h1>{obj}</h1>
+                      </div>
+              )
+          })}
         
     </div>
     );
