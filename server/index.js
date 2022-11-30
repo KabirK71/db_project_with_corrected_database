@@ -15,7 +15,7 @@ const db = mysql.createConnection({
   database: "foodpanda",
 });
 
-const handleNewUserSignUp = (email, password) => {
+const handleNewUserSignUp = (email, password, f_name, l_name) => {
   db.connect((error) => {
     if (!error) {
       console.log("Connection has been established");
@@ -33,7 +33,14 @@ const handleNewUserSignUp = (email, password) => {
               //   `CREATE TABLE IF NOT EXISTS users(email varchar(255), password varchar(255))`
               // );
               db.query(
-                "INSERT INTO C_CONTACT (EMAIL, PASSWORD) VALUES (?, ?)",
+                "INSERT INTO CUSTOMER (FIRST_NAME , LAST_NAME) VALUES (?, ?);",
+                [f_name, l_name],
+                (err, result) => {
+                  console.log(err || result);
+                }
+              );
+              db.query(
+                "INSERT INTO C_CONTACT (EMAIL, PWD) VALUES ( ?, ?);",
                 [email, password],
                 (err, result) => {
                   console.log(err || result);
@@ -42,7 +49,7 @@ const handleNewUserSignUp = (email, password) => {
             } catch (err) {
               console.log(err);
             }
-            db.end();
+            // db.end();
           }
         }
       );
@@ -56,43 +63,38 @@ const handleNewUserSignUp = (email, password) => {
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  const f_name = req.body.firstname;
+  const l_name = req.body.lastname;
 
   //check if email doesnt exist
-  handleNewUserSignUp(email, password);
+  handleNewUserSignUp(email, password, f_name, l_name);
   res.json({
     message: "user successfully created"
   })
 });
 
+
+
+
+
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
+
   db.connect((error) => {
     if (!error) {
       db.query(
-        "SELECT * FROM C_CONTACT WHERE email = ? AND password = ?",
+        "SELECT * FROM RESTAURANT",
         [email, password],
         (err, result) => {
+          // console.log(result);
           if (err) {
             res.send({ err: err });
           } else {
             if (result.length > 0) {
-              if(result[0].password === password){
-              
-              console.log("User logged in");
-              res.send(result);
-            }
-            else
-            {
-              // console.log(result[0].password);
-              console.log("Wrong password");
-              res.send(result);
-            }
-
               // console.log(result);
-              // res.send(result);
+              res.send(result);
             } else {
               res.send({ message: "Wrong username/password combination" });
             }
@@ -104,7 +106,57 @@ app.post("/login", (req, res) => {
       console.log(error);
     }
   });
+  
 });
+
+
+
+
+
+// app.post("/login", (req, res) => {
+//   const email = req.body.email;
+//   const password = req.body.password;
+
+
+//   db.connect((error) => {
+//     if (!error) {
+//       db.query(
+//         "SELECT * FROM C_CONTACT WHERE EMAIL = ? AND PWD = ?",
+//         [email, password],
+//         (err, result) => {
+//           console.log(result);
+//           if (err) {
+//             res.send({ err: err });
+//           } else {
+//             if (result.length > 0) {
+//               console.log(result);
+//               if(result[0].PWD === password){
+              
+//               console.log("User logged in");
+//               res.send(result);
+//             }
+//             else
+//             {
+//               // console.log(result[0].password);
+//               console.log("Wrong password");
+//               res.send(result);
+//             }
+
+//               // console.log(result);
+//               // res.send(result);
+//             } else {
+//               res.send({ message: "Wrong username/password combination" });
+//             }
+//           }
+//         }
+//       );
+//     } else {
+//       console.log("Connection failed");
+//       console.log(error);
+//     }
+//   });
+  
+// });
 
 app.post("/restsignup1", (req, res) => {
   
