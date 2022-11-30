@@ -642,42 +642,68 @@ app.post("/deliverorder", (req, res) => {
   // });
   // db.end();
 });
-app.post("/orderhistory", (req, res) => {
+
+//////////////////////////////////////////////////////////
+// app.post("/customerorderhistory", (req, res) => {
   
-  const cust = req.body.cust;
+//   const cust = 1;
   
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "SELECT * FROM ORDER WHERE CUST_ID = ?"
-        [cust],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send(result);
-            } else {
-              res.send({ message: "No orders to show" });
-            }
-          }
-        }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+//   // db.connect((error) => {
+//   //   if (!error) {
+//       db.query(
+//         "SELECT * FROM ORDERS WHERE CUST_ID = ?"
+//         [cust],
+//         (err, result) => {
+//           if (err) {
+//             res.send({ err: err });
+//           } else {
+//             if (result.length > 0) {
+//               console.log(result);
+//               res.send(result);
+//             } else {
+//               res.send({ message: "No orders to show" });
+//             }
+//           }
+//         }
+//       );
+//   //   } else {
+//   //     console.log("Connection failed");
+//   //     console.log(error);
+//   //   }
+//   // });
+//   // db.end();
+// });
+//////////////////////////////////////////
+
+app.post("/customerorderhistory", (req, res) => {
+  const cust = 1;
+  //check if email doesnt exist
+  db.query(
+    "SELECT REST_NAME, STATUS_ORDER FROM RESTAURANT,ORDERS WHERE (RESTAURANT.REST_ID = ORDERS.REST_ID AND CUST_ID = ?)",
+    [cust], (err, result)=>{
+      console.log(err||result);
+      if (err)
+      {
+        res.send({REST_ID: "error"});
+      }
+      else
+      {
+        console.log(result);
+        res.send(result);
+      }
+    }
+    );
 });
+
+
+
+
 
 
 app.post("/displayordersrestaurant", (req, res) => {
   
   const rest = req.body.restaurant;
-  
-  // db.connect((error) => {
-  //   if (!error) {
+
       db.query(
         "SELECT * FROM ORDERS WHERE REST_ID = ? AND STATUS_ORDER = 'DELIVERING'",
         [rest],
@@ -694,12 +720,7 @@ app.post("/displayordersrestaurant", (req, res) => {
           }
         }
       );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+
 });
 
 
@@ -745,36 +766,33 @@ app.post("/addresschange", (req, res) => {
 
 
 
-app.post("/change", (req, res) => {
+app.post("/updatepassword", (req, res) => {
   const email = req.body.email;
-  const password = req.body.password;
-  // db.connect((error) => {
-  //   if (!error) {
+  const oldpassword = req.body.oldpassword;
+  const newpassword = req.body.newpassword;
+  console.log(email);
+  console.log(oldpassword);
+  console.log(newpassword);
+
       db.query(
-        "UPDATE C_CONTACT SET PASSWORD = ? WHERE EMAIL = ?",
-        [password , email],
+        "SELECT * FROM C_CONTACT WHERE (EMAIL = ? AND PWD = ?)",
+        [email, oldpassword],
         (err, result) => {
           if (err) {
-            res.send({ err: err });
-          } else 
+            res.send({ message: "couldnt update password" });
+          } 
+          if(result.length > 0)
           {
-            if (result.length > 0) 
-            {
-              console.log("Password Updated");
-              res.send(result);
-            } 
-            else 
-            {
-              res.send({ message: "Couldn't update password" });
-            }
+            db.query("UPDATE C_CONTACT SET PWD = ? WHERE (EMAIL = ? AND PWD = ?)", [newpassword, email, oldpassword]);
+            res.send({message: "password updated"})
+          }
+          else 
+          {
+            res.send({message : "Incorrect Old Password"})
           }
         }
       );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
+
 });
 
 
@@ -782,6 +800,6 @@ app.post("/change", (req, res) => {
 
 
 app.listen(5000, () => {
-  console.log("Server started at Port 5000");
+  console.log("Server started at Port 3000");
   // console.log(db.state);
 });
