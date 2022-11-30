@@ -14,8 +14,8 @@ export const Login = () => {
       password: password,
     }).then((response) => {
       console.log(password);
-      console.log(response.data[0].password);
-      console.log(response.data[0].password === password);
+      console.log(response.data);
+      // console.log(response.data[0].password === password);
 
       {
         response.data[0].password === password ? setLoginStatus(2) : setLoginStatus(0);

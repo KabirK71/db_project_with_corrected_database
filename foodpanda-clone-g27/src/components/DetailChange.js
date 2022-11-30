@@ -4,14 +4,24 @@ import Axios from "axios";
 
 export const DetailChange = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [oldpassword, setOldPassword] = useState("");
+  const [newpassword, setNewPassword] = useState("");
+  const [updateStatus, setUpdateStatus] = useState([]);
+  
 
   const change = () => {
-    Axios.post("http://localhost:5000/change", {
+    Axios.post("http://localhost:5000/updatepassword", {
       email: email,
-      password: password,
+      oldpassword: oldpassword,
+      newpassword: newpassword,
+
     }).then((response) => {
+      console.log("below is response");
       console.log(response);
+      console.log("below is response.data.message");
+
+      console.log(response.data.message);
+      setUpdateStatus([response.data.message])
     });
   };
 
@@ -27,16 +37,36 @@ export const DetailChange = () => {
           setEmail(e.target.value);
         }}
       />
-      <label>Password</label>
+      <br></br>
+      <label>Old Password</label>
       <input
         type="password"
         name="password"
-        placeholder="Password"
+        placeholder="Type Old Password"
         onChange={(e) => {
-          setPassword(e.target.value);
+          setOldPassword(e.target.value);
         }}
       />
+      <br></br>
+      <label>New Password</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="Type New Password"
+        onChange={(e) => {
+          setNewPassword(e.target.value);
+        }}
+      />
+      <br></br>
       <button onClick={change}>Change</button>
+      
+      {updateStatus.map((obj) => {
+            return (
+                <div>
+                    <h1>{obj}</h1>
+                </div>
+            );
+        })}
     </div>
   );
 };

@@ -37,7 +37,7 @@ export const VoucherGenerate = () => {
             setRestaurant(e.target.value);
             }}
         />
-        <label>Percentage To Deducct</label>
+        <label>Percentage To Deduct</label>
         <input
             type="number"
             name="percentage"
