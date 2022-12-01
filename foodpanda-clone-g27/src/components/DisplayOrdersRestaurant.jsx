@@ -14,7 +14,7 @@ export const DisplayOrdersRestaurant = () => {
         });
     }, []);
 
-    return (
+    return ( 
         <div className="DisplayOrdersRestaurant">
         <label>Orders</label>
         {searchResults.map((obj) => {

@@ -74,8 +74,6 @@ app.post("/register", (req, res) => {
 });
 
 
-
-
 app.post("/vouchergenerate", (req, res) => {
   const code = req.body.voucher;
   const restaurant = req.body.restaurant;
@@ -98,84 +96,69 @@ app.post("/vouchergenerate", (req, res) => {
     );
 });
 
-
-
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
+    db.query(
+      "SELECT * FROM C_CONTACT WHERE EMAIL = ? AND PWD = ?",
+      [email, password],
+      (err, result) => {
+        console.log(result);
+        if (err) {
+          res.send({ err: err });
+        } else {
+          if (result.length > 0) {
+            console.log(result);
+            if(result[0].PWD === password){
+            
+            console.log("User logged in");
+            res.send(result);
+          }
+          else
+          {
+            console.log("Wrong password");
+            res.send(result);
+          }
 
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "SELECT * FROM C_CONTACT WHERE EMAIL = ? AND PWD = ?",
-        [email, password],
-        (err, result) => {
-          console.log(result);
-          if (err) {
-            res.send({ err: err });
           } else {
-            if (result.length > 0) {
-              console.log(result);
-              if(result[0].PWD === password){
-              
-              console.log("User logged in");
-              res.send(result);
-            }
-            else
-            {
-              // console.log(result[0].password);
-              console.log("Wrong password");
-              res.send(result);
-            }
-
-              // console.log(result);
-              // res.send(result);
-            } else {
-              res.send({ message: "Wrong username/password combination" });
-            }
+            res.send({ message: "Wrong username/password combination" });
           }
         }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  
+      }
+    ); 
 });
 
-app.post("/restsignup1", (req, res) => {
+app.post("/restsignup", (req, res) => {
   
   const restaurantname = req.body.restaurantname;
   const email = req.body.email;
   const password = req.body.password;
   const phone = req.body.phone;
   
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        
-        "INSERT INTO RESTAURANT (REST_NAME) VALUES (?); INSERT INTO R_CONTACT (PHONE_NO, EMAIL, PASSWORD) VALUES (?, ?, ?);",
-        [restaurantname, phone, email, password],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send({message: "Information Saved"});
-            } else {
-              res.send({ message: "Unable to save the info"});
-            }
-          }
-        }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+  db.query(
+    "INSERT INTO RESTAURANT (REST_NAME) VALUES (?);",
+    [restaurantname],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({message: "Information Saved"});
+      }
+    }
+  );
+
+  db.query(
+    "INSERT INTO R_CONTACT (PHONE_NO, EMAIL, PASSWORD) VALUES (?, ?, ?);",
+    [phone, email, password],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({message: "Information Saved"});
+      }
+    }
+  );
 });
 
 app.post("/restsignup2", (req, res) => {
@@ -184,62 +167,40 @@ app.post("/restsignup2", (req, res) => {
   const area = req.body.area;
   const street = req.body.street;
   const building = req.body.building;
-  
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "INSERT INTO R_LOCATION (CITY, AREA, STREET BUILDING) VALUES (?, ?, ?, ?);",
-        [city, area, street, building],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send({message: "Information Saved"});
-            } else {
-              res.send({ message: "Unable to save the info"});
-            }
-          }
-        }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+
+  db.query(
+    "INSERT INTO R_LOCATION (CITY, AREA, STREET BUILDING) VALUES (?, ?, ?, ?);",
+    [city, area, street, building],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({message: "Information Saved"});
+      }
+    }
+  );
 });
+
+
 app.post("/search", (req, res) => {
   const restaurant = req.body.restaurant;
 
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "SELECT * FROM RESTAURANT WHERE REST_NAME = ? OR CUISINES = ?",
-        [restaurant , restaurant],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send(result);
-            } else {
-              res.send({ message: "wrong restaurant" });
-            }
-          }
+  db.query(
+    "SELECT * FROM RESTAURANT WHERE REST_NAME = ? OR CUISINES = ?",
+    [restaurant , restaurant],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        if (result.length > 0) {
+          res.send(result);
+        } else {
+          res.send({ message: "wrong restaurant" });
         }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+      }
+    }
+  );
 });
-
-
-
-
 
 app.post("/landingpageforcustomers", (req, res) => {
   
@@ -258,36 +219,27 @@ app.post("/landingpageforcustomers", (req, res) => {
       }
     }
   );
-
 });
-
 
 app.post("/landingpageforrestaurant", (req, res) => {
   
   const restaurant = req.body.restaurant;
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?",
-        [restaurant],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send(result);
-            } else {
-              res.send({ message: "no menu found" });
-            }
-          }
+  db.query(
+    "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?",
+    [restaurant],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        if (result.length > 0) {
+          res.send(result);
+        } else {
+          res.send({ message: "no menu found" });
         }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+      }
+    }
+  );
+
 });
 
 app.post("/landingpageforrestaurantadd", (req, res) => {
