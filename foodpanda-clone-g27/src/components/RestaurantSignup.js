@@ -2,14 +2,14 @@
 import React, { useState } from "react";
 import Axios from "axios";
 
-export const RestaurantSignup = () => {
+export const RestaurantSignUp = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [phone, setPhone] = useState();
+    const [phone, setPhone] = useState("");
     const [restaurantname, setRestaurantName] = useState("");
 
-    const restsignup = () => {
+    const signup = () => {
         Axios.post("http://localhost:5000/restsignup", {
         restaurantname: restaurantname,
         email: email,
@@ -22,8 +22,7 @@ export const RestaurantSignup = () => {
 
     return (
         <div className="restsignup">
-
-        <label>Voucher Code</label>
+        <label>Restaurant Name</label>
         <input
             type="text"
             name="restaurantname"
@@ -37,7 +36,7 @@ export const RestaurantSignup = () => {
         <input
             type="email"
             name="email"
-            placeholder="Enter your restaurant ID"
+            placeholder="Enter your restaurant Email"
             onChange={(e) => {
             setEmail(e.target.value);
             }}
@@ -62,7 +61,7 @@ export const RestaurantSignup = () => {
             setPhone(e.target.value);
             }}
         />
-        <button onClick={restsignup}>SignUp</button>
+        <button onClick={signup}>SignUp</button>
         </div>
     );
     }

@@ -32,7 +32,7 @@ export const VoucherGenerate = () => {
         <input
             type="email"
             name="email"
-            placeholder="Enter your restauran ID"
+            placeholder="Email ID"
             onChange={(e) => {
             setRestaurant(e.target.value);
             }}
@@ -53,4 +53,5 @@ export const VoucherGenerate = () => {
 
 
     // there is a problem with this one guys. The restaurant is not supposed to know its own id. We will just have to take an email from them and get the rest_id from the backend using multiple queries shayad
+    //bhai email hi li hai
     
