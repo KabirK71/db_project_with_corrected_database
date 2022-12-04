@@ -11,7 +11,7 @@ app.use(cors());
 const db = mysql.createConnection({
   user: "root",
   host: "localhost",
-  password: "Kabir@123",
+  password: "sarim123",
   database: "foodpanda",
 });
 
@@ -135,51 +135,48 @@ app.post("/restsignup", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const phone = req.body.phone;
+  const city = req.body.city;
+  const area = req.body.area;
+  const street = req.body.street;
+  const building = req.body.building;
   
   db.query(
     "INSERT INTO RESTAURANT (REST_NAME) VALUES (?);",
     [restaurantname],
     (err, result) => {
       if (err) {
-        res.send({ err: err });
+        res.send({ message: err });
       } else {
-        res.send({message: "Information Saved"});
+        db.query(
+          "INSERT INTO R_CONTACT (PHONE_NO, EMAIL, PWD) VALUES (?, ?, ?);",
+          [phone, email, password],
+          (err, result) => {
+            if (err) {
+              res.send({ message: err });
+            } else {
+              // res.send({message: "Information Saved"});
+              db.query(
+                "INSERT INTO R_LOCATION (CITY, AREA, STREET, BUILDING) VALUES (?, ?, ?, ?);",
+                [city, area, street, building],
+                (err, result) => {
+                  if (err) {
+                    res.send({ err: err });
+                  } else {
+                    res.send({message: "Information Saved"});
+                  }
+                }
+              );
+            }
+          }
+        );
+        // res.send({message: "Information Saved"});
       }
     }
   );
 
-  db.query(
-    "INSERT INTO R_CONTACT (PHONE_NO, EMAIL, PASSWORD) VALUES (?, ?, ?);",
-    [phone, email, password],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      } else {
-        res.send({message: "Information Saved"});
-      }
-    }
-  );
+ 
 });
 
-app.post("/restsignup2", (req, res) => {
-  
-  const city = req.body.city;
-  const area = req.body.area;
-  const street = req.body.street;
-  const building = req.body.building;
-
-  db.query(
-    "INSERT INTO R_LOCATION (CITY, AREA, STREET BUILDING) VALUES (?, ?, ?, ?);",
-    [city, area, street, building],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      } else {
-        res.send({message: "Information Saved"});
-      }
-    }
-  );
-});
 
 
 app.post("/search", (req, res) => {
@@ -242,11 +239,12 @@ app.post("/landingpageforrestaurant", (req, res) => {
 
 });
 
-app.post("/landingpageforrestaurantadd", (req, res) => {
+app.post("/addmenu", (req, res) => {
   
-  const restaurant = req.body.restaurant;
+  const name = req.body.name;
   const food = req.body.food;
   const price = req.body.price;
+
   // db.connect((error) => {
   //   if (!error) {
       db.query(
@@ -309,7 +307,7 @@ app.post("/selectedrestaurant", (req, res) => {
   // db.connect((error) => {
   //   if (!error) {
       db.query(
-        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?",
+        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_NAME = ?",
         [restaurant],
         (err, result) => {
           if (err) {
