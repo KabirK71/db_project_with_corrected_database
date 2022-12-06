@@ -5,9 +5,10 @@ import logo from "../assets/logo_svg.svg";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = useState(1);
+  const [loginStatus, setLoginStatus] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
 
   const login = () => {
     Axios.post("http://localhost:5000/login", {
@@ -15,14 +16,38 @@ export const Login = () => {
       password: password,
     }).then((response) => {
       console.log(password);
-      console.log(response.data);
+      console.log(response);
+      if(response.data.message == "User logged in")
+      {
+        sessionStorage.setItem("email", email);
+        setLoginStatus("true") 
+        
+
+      }
+      else if (response.data == "Wrong username/password combination")
+      {
+        console.log("Wrong username/password combination");
+
+      }
+      else
+      {
+        console.log("error loggin in");
+      }
+      if (loginStatus == "true")
+      {
+        navigate("/customerlandingpage");
+      }
+
+      }
+      // if(response)
       // console.log(response.data[0].password === password);
 
       // {
       //   response.data[0].password === password ? setLoginStatus(2) : setLoginStatus(0);
       // }
-    });
-    navigate("/");
+    );
+    
+    
   };
 
   return (

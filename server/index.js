@@ -109,18 +109,18 @@ app.post("/login", (req, res) => {
           res.send({ err: err });
         } else {
           if (result.length > 0) {
-            console.log(result);
+              console.log(result);
             if(result[0].PWD === password){
-            
-            console.log("User logged in");
-            res.send(result);
-          }
-          else
-          {
-            alert("FAIL FAIL")
-            console.log("Wrong password");
-            res.send(result);
-          }
+              
+              console.log("User logged in");
+              res.send({message: "User logged in"});
+            }
+            else
+            {
+              alert("FAIL FAIL")
+              console.log("Wrong password");
+              res.send(result);
+            }
 
           } else {
             res.send({ message: "Wrong username/password combination" });

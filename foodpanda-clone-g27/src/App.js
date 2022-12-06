@@ -17,7 +17,6 @@ import { RestaurantSignUp } from './components/RestaurantSignUp';
 import { AddMenu } from './components/AddMenu'
 import { DeleteMenu } from './components/DeleteMenu';
 import { LandingPageRestaurant } from './components/LandingPageRestaurant';
-
 import Welcome from './components/Welcome';
 
 
