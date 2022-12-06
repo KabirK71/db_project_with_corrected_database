@@ -11,9 +11,23 @@ export const LandingPageCustomer = () => {
     Axios.post("http://localhost:5000/landingpageforcustomers").then((response) => {
       console.log(response);
       console.log("rendered");
-      setSearchResults([...searchResults, response.data[0]]);
+      setSearchResults(...searchResults, response.data);
+      console.log("this is search results", searchResults);
     });
   }, []);
+
+
+  const restList = searchResults.map((item) => (
+    <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 ">
+      <button class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white hover:bg-gray-50">
+        <p href="" class="mb-4 text-md font-semibold">{item.REST_NAME}</p>       
+        <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Cuisine: {item.CUISINES}</p>
+        <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Delivery fee: {item.DELIVERY_FEE}</p>
+        <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Discount: {item.DISCOUNT}%</p>
+        <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Price Rating: {item.PRICE_RATING}</p>
+      </button>
+    </div>
+  ));
 
   return (
     <div className="LandingPageForCustomers">
@@ -56,14 +70,17 @@ export const LandingPageCustomer = () => {
         </nav>
       </header>
 
-      <label>Restaurants available near you</label>
-      {searchResults.map((obj) => {
-        return (
-          <div>
-            <h1>{obj}</h1>
-          </div>
-        );
-      })}
+      <h2 class="mx-auto max-w-screen-md text-center font-semibold mt-2 text-lg lg:mb-12">Restaurants Available Near You</h2>  
+      <div>{restList}</div>
     </div>
   );
 };
+
+
+// {searchResults.map((obj) => {
+//   return (
+//     <div>
+//       <h1>{obj}</h1>
+//     </div>
+//   );
+// })}

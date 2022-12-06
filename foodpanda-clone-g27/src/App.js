@@ -13,7 +13,7 @@ import { LandingPageCustomer } from './components/LandingPageCustomer';
 import { DisplayOrdersRestaurant } from './components/DisplayOrdersRestaurant'
 import { COrderHistory } from './components/COrderHistory';
 import { VoucherGenerate } from './components/VoucherGenerate';
-import { RestaurantSignUp } from './components/RestaurantSignUp';
+import { RestaurantSignUp } from './components/RestaurantSignup';
 
 
 import Welcome from './components/Welcome';
@@ -35,7 +35,6 @@ export default function App() {
         <Route path="/customerorderhistory" element={<COrderHistory />} />
         <Route path="/vouchergenerate" element={<VoucherGenerate />} />
         <Route path="/restsignup" element={<RestaurantSignUp />} />
-
       </Routes>
     </Router>
   );
