@@ -17,7 +17,7 @@ export const LandingPageCustomer = () => {
 
      
     return (
-        <div className="LandingPageForCustomers">
+        <div className="LandingPageForRestaurant">
         <label>Menu</label>
         {searchResults.map((obj) => {
             return (

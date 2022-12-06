@@ -8,7 +8,7 @@ export const AddMenu = () => {
     const [price, setPrice] = useState("");
     const [description, setDescription] = useState("");
     const [email, setEmail] = useState("");
-    const [result, setResult] = useState([]);
+    // const [result, setResult] = useState([]);
 
     const Add = () => {
         Axios.post("http://localhost:5000/addmenu", {
@@ -19,7 +19,7 @@ export const AddMenu = () => {
         
         }).then((response) => {
         console.log(response);
-        setResult([...result, response.message]);
+        // setResult([...result, response.message]);
 
         });
     };
@@ -64,12 +64,12 @@ export const AddMenu = () => {
         />
 
         <button onClick={Add}>Add</button>
-        {
+        {/* {
             result.map((val) => {
                 return (<h1>{val}</h1>);
             }
             )
-        }
+        } */}
         </div>
     );
 };

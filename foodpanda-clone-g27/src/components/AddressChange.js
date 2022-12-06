@@ -4,8 +4,6 @@ import Axios from "axios";
 
 export const AddressChange = () => {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    // const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [area, setArea] = useState("");
     const [building, setBuilding] = useState("");
@@ -15,7 +13,6 @@ export const AddressChange = () => {
         Axios.post("http://localhost:5000/addresschange", {
         // address: address,
         email: email,
-        password: password,
         city: city,
         area: area,
         building: building,
@@ -24,7 +21,6 @@ export const AddressChange = () => {
         console.log(response);
         });
     };
-    
     return (
         <div className="change">
         <label>Email Adress</label>
@@ -34,15 +30,6 @@ export const AddressChange = () => {
             placeholder="Email Address"
             onChange={(e) => {
             setEmail(e.target.value);
-            }}
-        />
-        <label>Password</label>
-        <input
-            type="password"
-            name="password"
-            placeholder="Your Password"
-            onChange={(e) => {
-            setPassword(e.target.value);
             }}
         />
 
