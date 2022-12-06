@@ -117,6 +117,7 @@ app.post("/login", (req, res) => {
           }
           else
           {
+            alert("FAIL FAIL")
             console.log("Wrong password");
             res.send(result);
           }
@@ -220,22 +221,35 @@ app.post("/landingpageforcustomers", (req, res) => {
 
 app.post("/landingpageforrestaurant", (req, res) => {
   
-  const restaurant = req.body.restaurant;
-  db.query(
-    "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?",
-    [restaurant],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      } else {
-        if (result.length > 0) {
-          res.send(result);
-        } else {
-          res.send({ message: "no menu found" });
-        }
-      }
+  const restaurant = "jj@jj";
+  db.query("SELECT REST_ID FROM R_CONTACT WHERE EMAIL = ?",
+  [restaurant],
+  (err,result1)=>{
+    if (err) {
+      res.send({message:err})
     }
-  );
+    else
+    {
+      const rest_id = result1[0].REST_ID; 
+      db.query(
+        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?)",
+        [rest_id],
+        (err, result) => {
+          if (err) {
+            res.send({ err: err });
+          } else {
+            console.log(result);
+            if (result.length > 0) {
+              res.send(result);
+            } else {
+              res.send({ message: "no menu found" });
+            }
+          }
+        }
+      );
+    }
+  })
+
 
 });
 
@@ -757,6 +771,6 @@ app.post("/updatepassword", (req, res) => {
 
 
 app.listen(5000, () => {
-  console.log("Server started at Port 3000");
+  console.log("Server started at Port 5000");
   // console.log(db.state);
 });
