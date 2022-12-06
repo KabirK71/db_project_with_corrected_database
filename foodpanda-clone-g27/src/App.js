@@ -39,6 +39,7 @@ export default function App() {
         <Route path="/restsignup" element={<RestaurantSignUp />} />
         <Route path="/addmenu" element={<AddMenu />} />
         <Route path="/deletemenu" element={<DeleteMenu />} />
+        <Route path="/detailchange" element={<DetailChange />} />
         <Route path="/landingpageforrestaurant" element={<LandingPageRestaurant />} />
 
       </Routes>

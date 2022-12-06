@@ -48,6 +48,8 @@ export const LandingPageCustomer = () => {
     });
   }, []);
 
+
+
   const restList = searchResults.map((item) => (
     <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 ">
       <button class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white hover:bg-gray-50" onClick={()=>{reqGen(item.REST_NAME)}}>
