@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo_svg.svg";
 import { Login } from "./Login";
 
+
 export const Signup = () => {
 
   const navigate = useNavigate();
@@ -11,17 +12,31 @@ export const Signup = () => {
   const [lastName, setLastNameReg] = useState("")
   const [emailReg, setEmailReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
+  const [phone, setPhone] = useState();
+  const [signupStatus, setSignupStatus] = useState("");
 
-  const register = () => {
+  const register = (e) => {
+    e.preventDefault()
     Axios.post("http://localhost:5000/register", {
       email:emailReg, 
       password:passwordReg,
       firstname: firstName,
       lastname: lastName,
+      phone:phone,
     }).then((response) => {
-      console.log(response);
+      console.log(response.data);
+      if (response.data.message=="EMAIL EXISTS")
+      {
+        //error case
+        setSignupStatus("EMAIL EXISTS")
+      }
+      else{
+        //normal case
+        navigate("/login")
+        
+      }
       });
-    navigate("/login");
+        
   };
 
   return (
@@ -98,12 +113,31 @@ export const Signup = () => {
                   }}
                 />
               </div>
+              <div>
+                <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Phone Number
+                </label>
+
+                <input
+                  type="text"c
+                  name="number"
+                  id="number"
+                  placeholder="Phone Number"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                  
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                  }}
+                />
+              </div>
                 <button
                   type="submit"
                   class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mt-7"
                 >
                   Sign Up
                 </button>
+                <p>{signupStatus}</p>
           </form>
         </div>
       </div>

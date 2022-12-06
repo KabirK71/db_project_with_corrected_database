@@ -15,49 +15,60 @@ const db = mysql.createConnection({
   database: "foodpanda",
 });
 
-const handleNewUserSignUp = (email, password, f_name, l_name) => {
-  // db.connect((error) => {
-  //   if (!error) {
-  //     console.log("Connection has been established");
-      db.query(
-        `CREATE DATABASE IF NOT EXISTS foodpanda`,
-        async (err2, result) => {
-          if (err2) {
-            console.log(err2);
-          } else {
-            console.log("Database Created");
-            try {
-              //call create table here using await like done below here.
-              db.query("USE foodpanda");
-              // db.query(
-              //   `CREATE TABLE IF NOT EXISTS users(email varchar(255), password varchar(255))`
-              // );
-              db.query(
-                "INSERT INTO CUSTOMER (FIRST_NAME , LAST_NAME) VALUES (?, ?);",
-                [f_name, l_name],
-                (err, result) => {
-                  console.log(err || result);
+const handleNewUserSignUp = (email, password, f_name, l_name, phone, res) => {
+      console.log(phone);
+             
+          db.query(
+            `CREATE DATABASE IF NOT EXISTS foodpanda`,
+            async (err2, result) => {
+              if (err2) {
+                console.log(err2);
+              } else {
+                console.log("Database Created");
+                try {
+                  //call create table here using await like done below here.
+                  db.query("USE foodpanda");
+                  // db.query(
+                  //   `CREATE TABLE IF NOT EXISTS users(email varchar(255), password varchar(255))`
+                  // );
+                  db.query("SELECT * FROM C_CONTACT WHERE EMAIL = ?",
+                  [email],
+                  (err,result)=>{
+                  if (err) {
+                    res.send({message:err})
+                  }
+                  else if (result.length > 0)
+                  {
+                    res.send({message:"EMAIL EXISTS"})
+                    // alert("email already exits brother")
+                  }
+                  else
+                  {
+                    db.query(
+                      "INSERT INTO CUSTOMER (FIRST_NAME , LAST_NAME) VALUES (?, ?);",
+                      [f_name, l_name],
+                      (err, result) => {
+                        console.log(err || result);
+                      }
+                    );
+                    db.query(
+                      "INSERT INTO C_CONTACT (PHONE_NO, EMAIL, PWD) VALUES (?,?,?);",
+                      [phone, email, password],
+                      (err, result) => {
+                        console.log(err || result);
+                      }
+                    );
+                    res.send(email);
+                  }})
+                } catch (err) {
+                  console.log(err);
                 }
-              );
-              db.query(
-                "INSERT INTO C_CONTACT (EMAIL, PWD) VALUES ( ?, ?);",
-                [email, password],
-                (err, result) => {
-                  console.log(err || result);
-                }
-              );
-            } catch (err) {
-              console.log(err);
+              }
             }
-            // db.end();
-          }
-        }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
+          );
+
+        // }
+      // })
 };
 
 app.post("/register", (req, res) => {
@@ -65,12 +76,12 @@ app.post("/register", (req, res) => {
   const password = req.body.password;
   const f_name = req.body.firstname;
   const l_name = req.body.lastname;
-
+  const phone = req.body.phone
   //check if email doesnt exist
-  handleNewUserSignUp(email, password, f_name, l_name);
-  res.json({
-    message: "user successfully created"
-  })
+  handleNewUserSignUp(email, password, f_name, l_name, phone, res);
+  // res.json({
+  //   message: "user successfully created"
+  // })
 });
 
 
