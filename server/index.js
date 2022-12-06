@@ -117,6 +117,7 @@ app.post("/login", (req, res) => {
           }
           else
           {
+            alert("FAIL FAIL")
             console.log("Wrong password");
             res.send(result);
           }
@@ -135,51 +136,48 @@ app.post("/restsignup", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const phone = req.body.phone;
+  const city = req.body.city;
+  const area = req.body.area;
+  const street = req.body.street;
+  const building = req.body.building;
   
   db.query(
     "INSERT INTO RESTAURANT (REST_NAME) VALUES (?);",
     [restaurantname],
     (err, result) => {
       if (err) {
-        res.send({ err: err });
+        res.send({ message: err });
       } else {
-        res.send({message: "Information Saved"});
+        db.query(
+          "INSERT INTO R_CONTACT (PHONE_NO, EMAIL, PWD) VALUES (?, ?, ?);",
+          [phone, email, password],
+          (err, result) => {
+            if (err) {
+              res.send({ message: err });
+            } else {
+              // res.send({message: "Information Saved"});
+              db.query(
+                "INSERT INTO R_LOCATION (CITY, AREA, STREET, BUILDING) VALUES (?, ?, ?, ?);",
+                [city, area, street, building],
+                (err, result) => {
+                  if (err) {
+                    res.send({ err: err });
+                  } else {
+                    res.send({message: "Information Saved"});
+                  }
+                }
+              );
+            }
+          }
+        );
+        // res.send({message: "Information Saved"});
       }
     }
   );
 
-  db.query(
-    "INSERT INTO R_CONTACT (PHONE_NO, EMAIL, PASSWORD) VALUES (?, ?, ?);",
-    [phone, email, password],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      } else {
-        res.send({message: "Information Saved"});
-      }
-    }
-  );
+ 
 });
 
-app.post("/restsignup2", (req, res) => {
-  
-  const city = req.body.city;
-  const area = req.body.area;
-  const street = req.body.street;
-  const building = req.body.building;
-
-  db.query(
-    "INSERT INTO R_LOCATION (CITY, AREA, STREET BUILDING) VALUES (?, ?, ?, ?);",
-    [city, area, street, building],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      } else {
-        res.send({message: "Information Saved"});
-      }
-    }
-  );
-});
 
 
 app.post("/search", (req, res) => {
@@ -223,47 +221,72 @@ app.post("/landingpageforcustomers", (req, res) => {
 
 app.post("/landingpageforrestaurant", (req, res) => {
   
-  const restaurant = req.body.restaurant;
-  db.query(
-    "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?",
-    [restaurant],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      } else {
-        if (result.length > 0) {
-          res.send(result);
-        } else {
-          res.send({ message: "no menu found" });
-        }
-      }
+  const restaurant = "jj@jj";
+  db.query("SELECT REST_ID FROM R_CONTACT WHERE EMAIL = ?",
+  [restaurant],
+  (err,result1)=>{
+    if (err) {
+      res.send({message:err})
     }
-  );
-
-});
-
-app.post("/landingpageforrestaurantadd", (req, res) => {
-  
-  const restaurant = req.body.restaurant;
-  const food = req.body.food;
-  const price = req.body.price;
-  // db.connect((error) => {
-  //   if (!error) {
+    else
+    {
+      const rest_id = result1[0].REST_ID; 
       db.query(
-        "INSERT INTO MENU (FOOD_NAME, FOOD_PRICE) VALUES (?,?) WHERE REST_ID = ?",
-        [food, price, restaurant],
+        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?)",
+        [rest_id],
         (err, result) => {
           if (err) {
             res.send({ err: err });
           } else {
+            console.log(result);
             if (result.length > 0) {
-              res.send({message: "item inserted"});
+              res.send(result);
             } else {
-              res.send({ message: "Could not add item" });
+              res.send({ message: "no menu found" });
             }
           }
         }
       );
+    }
+  })
+
+
+});
+
+app.post("/addmenu", (req, res) => {
+  
+  const name = req.body.name;
+  const email = req.body.email;
+  const price = req.body.price;
+  const desc = req.body.description;
+
+  // db.connect((error) => {
+  //   if (!error) {
+    db.query("SELECT REST_ID FROM R_CONTACT WHERE EMAIL = (?)",
+    [email],
+    (err,result1) =>{
+      if (err) {
+        res.send({message:err})
+      }
+      else
+      {
+        const rest_id = result1[0].REST_ID;
+         db.query(
+          "INSERT INTO MENU (FOOD_NAME, FOOD_PRICE, DESCRIPTION, REST_ID) VALUES (?,?,?,?)",
+          [name, price, desc, rest_id],
+          (err, result) => {
+            if (err) {
+              res.send({ err: err });
+            } else {
+              res.send({message: "Item Inserted"});
+            }
+          }
+        );
+
+      }
+    })
+
+
   //   } else {
   //     console.log("Connection failed");
   //     console.log(error);
@@ -273,24 +296,20 @@ app.post("/landingpageforrestaurantadd", (req, res) => {
 });
 
 
-app.post("/landingpageforrestaurantdelete", (req, res) => {
+app.post("/deletemenu", (req, res) => {
   
-  const restaurant = req.body.restaurant;
-  const food = req.body.food;
+  const email = req.body.email;
+  const name = req.body.name;
   // db.connect((error) => {
   //   if (!error) {
       db.query(
-        "DELETE FROM MENU WHERE REST_ID = ? AND FOOD_NAME = ?",
-        [restaurant, food],
+        "DELETE FROM MENU WHERE REST_ID = (SELECT REST_ID FROM R_CONTACT WHERE EMAIL = ?) AND FOOD_NAME = ?",
+        [email, name],
         (err, result) => {
           if (err) {
-            res.send({ err: err });
+            res.send({ message: err });
           } else {
-            if (result.length > 0) {
-              res.send({message: "item deleted"});
-            } else {
-              res.send({ message: "Could not delete item" });
-            }
+            res.send({message: "Item Deleted!"})
           }
         }
       );
@@ -309,7 +328,7 @@ app.post("/selectedrestaurant", (req, res) => {
   // db.connect((error) => {
   //   if (!error) {
       db.query(
-        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?",
+        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_NAME = ?",
         [restaurant],
         (err, result) => {
           if (err) {
@@ -680,38 +699,38 @@ app.post("/displayordersrestaurant", (req, res) => {
 
 app.post("/addresschange", (req, res) => {
   const email = req.body.email;
-  const password = req.body.password;
   const city = req.body.city;
   const street = req.body.street;
   const building = req.body.building;
   const area = req.body.area;
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "UPDATE C_LOCATION SET AREA = ?, CITY = ?, STREET = ?, BUILDING = ? WHERE (EMAIL = ? and PASSWORD = ?)",
-        [area , city , street, building ,email, password],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else 
-          {
-            if (result.length > 0) 
-            {
-              console.log("Address Updated");
-              res.send(result);
-            } 
-            else 
-            {
-              res.send({ message: "Couldn't update Address" });
-            }
-          }
+
+
+      db.query("SELECT CUST_ID FROM C_CONTACT WHERE EMAIL = ?",
+      [email],
+      (err,result)=>{
+        if (err) {
+          res.send({message: err})
         }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
+        else
+        {
+          const cust_id = result[0].CUST_ID;
+          console.log(cust_id);
+          db.query(
+            "UPDATE C_LOCATION SET AREA = ?, CITY = ?, STREET = ?, BUILDING = ? WHERE CUST_ID = ?",
+            [area , city , street, building, cust_id],
+            (err, result) => {
+              if (err) {
+                res.send({ err: err });
+              } else 
+              {
+                res.send({message: "Updated"})
+              }
+            }
+          );
+
+        }
+      })
+
 });
 
 
@@ -752,6 +771,6 @@ app.post("/updatepassword", (req, res) => {
 
 
 app.listen(5000, () => {
-  console.log("Server started at Port 3000");
+  console.log("Server started at Port 5000");
   // console.log(db.state);
 });

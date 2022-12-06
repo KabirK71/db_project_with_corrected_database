@@ -1,4 +1,3 @@
-// make a landing page for customers that will display the items received from the backend in a card format
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
@@ -6,6 +5,7 @@ import logo from "../assets/logo_svg.svg";
 
 export const LandingPageCustomer = () => {
   const [searchResults, setSearchResults] = useState([]);
+  const [restaurant, setRestaurant] = useState("");
 
   useEffect(() => {
     Axios.post("http://localhost:5000/landingpageforcustomers").then((response) => {
@@ -16,10 +16,18 @@ export const LandingPageCustomer = () => {
     });
   }, []);
 
+  const reqGen = (restName)=>{
+    console.log(restName);
+    Axios.post("http://localhost:5000/landingpageforrestaurant",{
+      restName : restName,
+    }).then((response)=>{
+      console.log(response)
+    })
+  }
 
   const restList = searchResults.map((item) => (
     <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 ">
-      <button class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white hover:bg-gray-50">
+      <button class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white hover:bg-gray-50" onClick={()=>{reqGen(item.REST_NAME)}}>
         <p href="" class="mb-4 text-md font-semibold">{item.REST_NAME}</p>       
         <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Cuisine: {item.CUISINES}</p>
         <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Delivery fee: {item.DELIVERY_FEE}</p>
