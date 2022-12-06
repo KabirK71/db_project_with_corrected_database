@@ -221,10 +221,11 @@ app.post("/landingpageforcustomers", (req, res) => {
 
 app.post("/landingpageforrestaurant", (req, res) => {
   
-  const restaurant = "jj@jj";
+  const restaurant = "jj@jj"; // token shit here
   db.query("SELECT REST_ID FROM R_CONTACT WHERE EMAIL = ?",
   [restaurant],
   (err,result1)=>{
+    console.log(result1);
     if (err) {
       res.send({message:err})
     }
@@ -232,13 +233,14 @@ app.post("/landingpageforrestaurant", (req, res) => {
     {
       const rest_id = result1[0].REST_ID; 
       db.query(
-        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?)",
+        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?",
         [rest_id],
         (err, result) => {
+          console.log(result);
           if (err) {
-            res.send({ err: err });
+            res.send({ message: err });
           } else {
-            console.log(result);
+            // console.log(result);
             if (result.length > 0) {
               res.send(result);
             } else {
@@ -647,7 +649,7 @@ app.post("/deliverorder", (req, res) => {
 //////////////////////////////////////////
 
 app.post("/customerorderhistory", (req, res) => {
-  const cust = 1;
+  const cust = 1; // token shit here
   //check if email doesnt exist
   db.query(
     "SELECT REST_NAME, STATUS_ORDER FROM RESTAURANT,ORDERS WHERE (RESTAURANT.REST_ID = ORDERS.REST_ID AND CUST_ID = ?)",
