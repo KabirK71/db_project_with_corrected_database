@@ -10,7 +10,7 @@ export const LandingPageCustomer = () => {
   useEffect(() => {
     Axios.post("http://localhost:5000/landingpageforcustomers").then((response) => {
       console.log(response);
-      // console.log("rendered");
+      console.log("rendered");
       setSearchResults(...searchResults, response.data);
       console.log("this is search results", searchResults);
     });
