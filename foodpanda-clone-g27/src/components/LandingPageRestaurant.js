@@ -6,17 +6,19 @@ import logo from "../assets/logo_svg.svg";
 import { FaTrashAlt, FaEdit } from "react-icons/fa"
 
 export const LandingPageRestaurant = () => {
-  // const [menuItems, setMenuItems] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [restaurant, setRestaurant] = useState("");
 
-  // useEffect(() => {
-    // get menu items for the restaurant
-  // }, []);
+  useEffect(() => {
+    Axios.post("http://localhost:5000/landingpageforrestaurant").then((response) => {
+    console.log(response);  
+    setSearchResults(...searchResults, response.data);
+    });
+  }, []);
 
-  // var searchResults = [{ CUISINES: "CHINESE", DELIVERY_FEE: 50, DISCOUNT: 0, PRICE_RATING: "$$", REST_ID: 1, REST_NAME: "Chop Chop", REST_RATING: 5 },{ CUISINES: "PAKISTANI", DELIVERY_FEE: 100, DISCOUNT: 20, PRICE_RATING: "$", REST_ID: 2, REST_NAME: "Karachi Hot & Spicy", REST_RATING: 4 },{ CUISINES: "ITALIAN", DELIVERY_FEE: 150, DISCOUNT: 30, PRICE_RATING: "$$$", REST_ID: 3, REST_NAME: "Pasta La Vista", REST_RATING: 3},
-  // ];
   var menuItems = [{FOOD_NAME: "Chicken Biryani", FOOD_PRICE: 500, DISCOUNT: 0}, {FOOD_NAME: "Chicken Pulao", FOOD_PRICE: 300, DISCOUNT: 0}, {FOOD_NAME: "Chicken Karahi", FOOD_PRICE: 400, DISCOUNT: 10}, {FOOD_NAME: "Chicken Tikka", FOOD_PRICE: 200, DISCOUNT: 0}, {FOOD_NAME: "Chicken Korma", FOOD_PRICE: 600, DISCOUNT: 0}, {FOOD_NAME: "Chicken Handi", FOOD_PRICE: 700, DISCOUNT: 10}, {FOOD_NAME: "Chicken Nihari", FOOD_PRICE: 800, DISCOUNT: 10}, {FOOD_NAME: "Chicken Qorma", FOOD_PRICE: 900, DISCOUNT: 0}, {FOOD_NAME: "Chicken Shashlik", FOOD_PRICE: 1000, DISCOUNT: 0}, {FOOD_NAME: "Chicken Kofta", FOOD_PRICE: 1100, DISCOUNT: 0}, {FOOD_NAME: "Chicken Kebab", FOOD_PRICE: 1200, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tandoori", FOOD_PRICE: 1300, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Masala", FOOD_PRICE: 1400, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Boti", FOOD_PRICE: 1500, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Karahi", FOOD_PRICE: 1600, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Handi", FOOD_PRICE: 1700, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Qorma", FOOD_PRICE: 1800, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Shashlik", FOOD_PRICE: 1900, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Kofta", FOOD_PRICE: 2000, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Kebab", FOOD_PRICE: 2100, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Tandoori", FOOD_PRICE: 2200, DISCOUNT: 0}, {FOOD_NAME: "Chicken Tikka Tikka Masala", FOOD_PRICE: 2300, DISCOUNT: 0},]
 
-  const restList = menuItems.map((item, index) => (
+  const restList = searchResults.map((item, index) => (
       <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 " key={index}>
         <div class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
           <p href="" class="flex flex-row mb-4 text-md font-semibold">{item.FOOD_NAME} <FaTrashAlt/> <FaEdit/></p>       

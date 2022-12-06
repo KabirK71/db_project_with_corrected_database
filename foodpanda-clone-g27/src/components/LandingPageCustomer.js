@@ -112,3 +112,6 @@ export const LandingPageCustomer = () => {
 //     </div>
 //   );
 // })}
+
+
+// onClick={()=>{reqGen(item.REST_NAME)}}>
