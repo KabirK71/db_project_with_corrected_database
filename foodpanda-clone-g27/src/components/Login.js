@@ -2,50 +2,45 @@ import { useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo_svg.svg";
+const bcrypt = require("bcryptjs");
+
+async function hashPassword(mypwd){
+  var hashPwd = await bcrypt.hash(mypwd,10);
+  // console.log("THE HASHED PWD IS",hashPwd);
+  return hashPwd;
+}
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = useState(false);
+  const [loginStatus, setLoginStatus] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  async function login(e) {
+    e.preventDefault()
+    Promise.resolve(hashPassword(password))
+    .then((hashPwd) => {
+      setPassword(hashPwd);
+      console.log("THE HASHED PWD IS",hashPwd);
+      Axios.post("http://localhost:5000/login", {
+        email: email,
+        password: hashPwd,
+      }).then((response) => {
 
-  const login = () => {
-    Axios.post("http://localhost:5000/login", {
-      email: email,
-      password: password,
-    }).then((response) => {
-      console.log(password);
-      console.log(response);
-      if(response.data.message == "User logged in")
-      {
-        sessionStorage.setItem("email", email);
-        setLoginStatus("true") 
-        
+        if(response.data === "User logged in"){
+          sessionStorage.setItem("email", email);
+          setLoginStatus(response.data); 
+          navigate("/customerlandingpage");
+        }
+        else if (response.data === "Incorrect Email or Password")
+        {
+          //need to set state
+          setLoginStatus(response.data);
+          // console.log("Wrong username/password combination");
+        }
+        });
 
-      }
-      else if (response.data == "Wrong username/password combination")
-      {
-        console.log("Wrong username/password combination");
-
-      }
-      else
-      {
-        console.log("error loggin in");
-      }
-      if (loginStatus == "true")
-      {
-        navigate("/customerlandingpage");
-      }
-
-      }
-      // if(response)
-      // console.log(response.data[0].password === password);
-
-      // {
-      //   response.data[0].password === password ? setLoginStatus(2) : setLoginStatus(0);
-      // }
-    );
+    });
     
     
   };
@@ -98,6 +93,7 @@ export const Login = () => {
             >
               Login
             </button>
+            <p>{loginStatus}</p>
           </form>
         </div>
       </div>

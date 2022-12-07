@@ -15,9 +15,7 @@ const db = mysql.createConnection({
   database: "foodpanda",
 });
 
-const handleNewUserSignUp = (email, password, f_name, l_name, phone, res) => {
-      console.log(phone);
-             
+const handleNewUserSignUp = (email, password, f_name, l_name, phone, res) => {            
           db.query(
             `CREATE DATABASE IF NOT EXISTS foodpanda`,
             async (err2, result) => {
@@ -28,9 +26,6 @@ const handleNewUserSignUp = (email, password, f_name, l_name, phone, res) => {
                 try {
                   //call create table here using await like done below here.
                   db.query("USE foodpanda");
-                  // db.query(
-                  //   `CREATE TABLE IF NOT EXISTS users(email varchar(255), password varchar(255))`
-                  // );
                   db.query("SELECT * FROM C_CONTACT WHERE EMAIL = ?",
                   [email],
                   (err,result)=>{
@@ -40,7 +35,6 @@ const handleNewUserSignUp = (email, password, f_name, l_name, phone, res) => {
                   else if (result.length > 0)
                   {
                     res.send({message:"EMAIL EXISTS"})
-                    // alert("email already exits brother")
                   }
                   else
                   {
@@ -77,11 +71,7 @@ app.post("/register", (req, res) => {
   const f_name = req.body.firstname;
   const l_name = req.body.lastname;
   const phone = req.body.phone
-  //check if email doesnt exist
   handleNewUserSignUp(email, password, f_name, l_name, phone, res);
-  // res.json({
-  //   message: "user successfully created"
-  // })
 });
 
 
@@ -110,7 +100,7 @@ app.post("/vouchergenerate", (req, res) => {
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  console.log("The hash is: ",password);
     db.query(
       "SELECT * FROM C_CONTACT WHERE EMAIL = ? AND PWD = ?",
       [email, password],
@@ -120,22 +110,15 @@ app.post("/login", (req, res) => {
           res.send({ err: err });
         } else {
           if (result.length > 0) {
-              console.log(result);
-            if(result[0].PWD === password){
-              
-              console.log("User logged in");
+              // console.log(result);
+              // console.log("User logged in");
               res.send({message: "User logged in"});
             }
-            else
+          else
             {
-              alert("FAIL FAIL")
-              console.log("Wrong password");
-              res.send(result);
+              res.send({message:"Incorrect Email or Password"});
             }
-
-          } else {
-            res.send({ message: "Wrong username/password combination" });
-          }
+           
         }
       }
     ); 

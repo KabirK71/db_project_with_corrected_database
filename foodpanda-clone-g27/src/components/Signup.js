@@ -3,8 +3,13 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo_svg.svg";
 import { Login } from "./Login";
+const bcrypt = require("bcryptjs");
 
-
+async function hashPassword(mypwd){
+  var hashPwd = await bcrypt.hash(mypwd,10);
+  // console.log("THE HASHED PWD IS",hashPwd);
+  return hashPwd;
+}
 export const Signup = () => {
 
   const navigate = useNavigate();
@@ -14,29 +19,30 @@ export const Signup = () => {
   const [passwordReg, setPasswordReg] = useState("");
   const [phone, setPhone] = useState();
   const [signupStatus, setSignupStatus] = useState("");
-
-  const register = (e) => {
+  
+  async function register (e) {
     e.preventDefault()
-    Axios.post("http://localhost:5000/register", {
-      email:emailReg, 
-      password:passwordReg,
-      firstname: firstName,
-      lastname: lastName,
-      phone:phone,
-    }).then((response) => {
-      console.log(response.data);
-      if (response.data.message=="EMAIL EXISTS")
-      {
-        //error case
-        setSignupStatus("EMAIL EXISTS")
-      }
-      else{
-        //normal case
-        navigate("/login")
-        
-      }
+    Promise.resolve(hashPassword(passwordReg))
+    .then((hashPwd) => {
+      setPasswordReg(hashPwd);
+      Axios.post("http://localhost:5000/register", {
+        email:emailReg, 
+        password:hashPwd,
+        firstname: firstName,
+        lastname: lastName,
+        phone:phone,
+      }).then((response) => {
+        console.log(response.data);
+        if (response.data === "EMAIL EXISTS") {
+          setSignupStatus(response.data);
+        } else {
+          
+          //implement local storage
+          // localStorage.setItem("email", JSON.stringify(response.data));
+          navigate("/login");
+        }
       });
-        
+    });        
   };
 
   return (
@@ -109,7 +115,7 @@ export const Signup = () => {
                   class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                   onChange={(e) => {
-                    setPasswordReg(e.target.value);
+                      setPasswordReg(e.target.value);
                   }}
                 />
               </div>
@@ -145,37 +151,3 @@ export const Signup = () => {
   );
 };
 
-
-
-
-// import { useState } from "react";
-// import Axios from "axios"
-// import { Link } from "react-router-dom";
-
-// export const Signup = () => {
-
-//   const [emailReg, setEmailReg] = useState("");
-//   const [passwordReg, setPasswordReg] = useState("");
-
-//   const register = () => {
-//     Axios.post("http://localhost:5000/register", {
-//       email:emailReg, 
-//       password:passwordReg,
-//     }).then((response) => {
-//       console.log(response);
-//       });
-//   };
-
-//     return (
-//       <div className="SignUp">
-//         <h1>Sign Up</h1>
-//         <label>Email Adress</label>
-//         <input type="email" name="email" placeholder="Email" onChange = {(e)=> {setEmailReg(e.target.value)}}/>
-//         <label>Password</label>
-//         <input type="password" name="password" placeholder="Password" onChange = {(e)=> {setPasswordReg(e.target.value)}}/>
-//         <Link to='/login'>
-//           <button onClick={register}>Sign Up</button>
-//         </Link>
-//       </div>
-//     );
-// }
