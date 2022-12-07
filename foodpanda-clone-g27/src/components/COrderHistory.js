@@ -9,7 +9,12 @@ export const COrderHistory = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.post("http://localhost:5000/customerorderhistory").then((response) => {
+    const config = {
+      headers: {
+        email : localStorage.getItem("email"),
+      },
+    }
+    Axios.post("http://localhost:5000/customerorderhistory", config).then((response) => {
       console.log(response.data.length);
       // for (let i = 0; i < response.data.length; i++) {
       // console.log(i);

@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 
 async function hashPassword(mypwd){
   var hashPwd = await bcrypt.hash(mypwd,10);
-  // console.log("THE HASHED PWD IS",hashPwd);
+  console.log("THE HASHED PWD IS",hashPwd);
   return hashPwd;
 }
 
@@ -18,29 +18,30 @@ export const Login = () => {
 
   async function login(e) {
     e.preventDefault()
-    Promise.resolve(hashPassword(password))
-    .then((hashPwd) => {
-      setPassword(hashPwd);
-      console.log("THE HASHED PWD IS",hashPwd);
+    // Promise.resolve(hashPassword(password))
+    // .then((hashPwd) => {
+    //   setPassword(hashPwd);0
+    //   console.log("THE HASHED PWD IS",hashPwd);
       Axios.post("http://localhost:5000/login", {
         email: email,
-        password: hashPwd,
+        password: password,
       }).then((response) => {
-
-        if(response.data === "User logged in"){
-          sessionStorage.setItem("email", email);
-          setLoginStatus(response.data); 
-          navigate("/customerlandingpage");
+        console.log(response.data);
+        if(response.data.message === "User logged in"){
+          localStorage.setItem("email", email);
+          setLoginStatus(response.data.message); 
+          navigate("/landingpagecustomer");
         }
-        else if (response.data === "Incorrect Email or Password")
+        else if (response.data.message === "Incorrect Email or Password")
         {
           //need to set state
-          setLoginStatus(response.data);
+          setLoginStatus(response.data.message);
+          alert("Incorrect Email or Password");
           // console.log("Wrong username/password combination");
         }
         });
 
-    });
+    // });  
     
     
   };

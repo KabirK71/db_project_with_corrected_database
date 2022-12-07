@@ -7,10 +7,10 @@ const bcrypt = require("bcryptjs");
 
 async function hashPassword(mypwd){
   var hashPwd = await bcrypt.hash(mypwd,10);
-  // console.log("THE HASHED PWD IS",hashPwd);
+  console.log("THE HASHED PWD IS",hashPwd);
   return hashPwd;
 }
-export const Signup = () => {
+export const SignUpRider = () => {
 
   const navigate = useNavigate();
   const [firstName, setFirstNameReg] = useState("");
@@ -21,43 +21,43 @@ export const Signup = () => {
   const [signupStatus, setSignupStatus] = useState("");
   
   async function register (e) {
-    e.preventDefault()
-    Promise.resolve(hashPassword(passwordReg))
-    .then((hashPwd) => {
-      setPasswordReg(hashPwd);
-      Axios.post("http://localhost:5000/register", {
-        email:emailReg, 
-        password:hashPwd,
-        firstname: firstName,
-        lastname: lastName,
-        phone:phone,
-      }).then((response) => {
-        console.log(response.data);
-        if (response.data === "EMAIL EXISTS") {
-          setSignupStatus(response.data);
-        } else {
+    // e.preventDefault()
+    // // Promise.resolve(hashPassword(passwordReg))
+    // // .then((hashPwd) => {
+    //   // setPasswordReg(hashPwd);
+    //   Axios.post("http://localhost:5000/register", {
+    //     email:emailReg, 
+    //     password:passwordReg,
+    //     firstname: firstName,
+    //     lastname: lastName,
+    //     phone:phone,
+    //   }).then((response) => {
+    //     console.log(response.data);
+    //     if (response.data === "EMAIL EXISTS") {
+    //       setSignupStatus(response.data);
+    //     } else {
           
-          //implement local storage
-          // localStorage.setItem("email", JSON.stringify(response.data));
-          navigate("/login");
-        }
-      });
-    });        
+    //       //implement local storage
+    //       // localStorage.setItem("email", JSON.stringify(response.data));
+    //       navigate("/login");
+    //     }
+    //   });
+    // // });        
   };
 
   return (
     <section class="bg-gray-50 dark:bg-gray-900">
-      <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div class="flex flex-col items-center justify-center px-6 py-4 mx-auto ">
         <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
           <img class="w-12 h-12 px-1 pt-1" src={logo} alt="logo" />
           Dastarkhwan
         </a>
+        <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white pb-4">Create a Rider account</h1>
         <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <form class="p-6 space-y-4 md:space-y-6 sm:p-8" onSubmit={register}>
-            <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">Create an account</h1>
             <div>
                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Firstt Name
+                  First Name
                 </label>
                 <input
                   type="text"
@@ -128,7 +128,7 @@ export const Signup = () => {
                   type="text"c
                   name="number"
                   id="number"
-                  placeholder="Phone Number"
+                  placeholder="03xxxxxxxxx"
                   class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                   
@@ -150,4 +150,3 @@ export const Signup = () => {
     </section>
   );
 };
-

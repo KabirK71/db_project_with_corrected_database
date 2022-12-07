@@ -4,7 +4,9 @@ import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 import {Login} from "./components/Login"
-import { Signup } from './components/Signup';
+import { SignUpCust } from './components/SignUpCust';
+import { SignUpRest } from './components/SignUpRest';
+import { SignUpRider } from './components/SignUpRider';
 import { SelectUser } from './components/SelectUser';
 import { Search } from './components/Search';
 import { DetailChange } from './components/DetailChange';  
@@ -26,7 +28,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Welcome/>}/>
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signupcust" element={<SignUpCust />} />
+        <Route path="/signuprest" element={<SignUpRest />} />
+        <Route path="/signuprider" element={<SignUpRider/>} />
         <Route path="/search" element={<Search />} />
         <Route path="/updatepassword" element={<DetailChange />} />
         <Route path="/addresschange" element={<AddressChange />} />
