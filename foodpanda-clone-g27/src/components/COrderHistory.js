@@ -11,7 +11,7 @@ export const COrderHistory = () => {
   useEffect(() => {
     const config = {
       headers: {
-        email : localStorage.getItem("email"),
+        email: localStorage.getItem("email"),
       },
     }
     Axios.post("http://localhost:5000/customerorderhistory", config).then((response) => {
@@ -58,7 +58,7 @@ export const COrderHistory = () => {
                 Profile
               </button>
             </div>
-            <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+            <div class="justify-between items-center w-full lg:flex lg:w-auto lg:order-1">
               <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                 <li>
                   <button
