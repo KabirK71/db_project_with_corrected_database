@@ -246,7 +246,7 @@ app.post("/login", (req, res) => {
           res.send({ err: err });
         } else {
           if (result.length > 0) {
-            res.send({message: "User logged in", type: "customer"});
+            res.send({message: "User logged in", type: "customer", id: result[0].CUST_ID});
           }
           else
           {
@@ -258,7 +258,7 @@ app.post("/login", (req, res) => {
                   res.send({ err: err });
                 } else {
                   if (result.length > 0) {
-                      res.send({message: "User logged in", type: "restaurant"});
+                      res.send({message: "User logged in", type: "restaurant", id: result[0].REST_ID});
                     }
                   else
                   {
@@ -270,7 +270,7 @@ app.post("/login", (req, res) => {
                           res.send({ err: err });
                         } else {
                           if (result.length > 0) {
-                              res.send({message: "User logged in", type: "rider"});
+                              res.send({message: "User logged in", type: "rider", id: result[0].RIDER_ID});
                             }
                           else
                           {
@@ -379,19 +379,19 @@ app.post("/landingpageforcustomers", (req, res) => {
 
 app.post("/landingpageforrestaurant", (req, res) => {
   
-  const restaurant = "jj@jj"; // token shit here
-  db.query("SELECT REST_ID FROM R_CONTACT WHERE EMAIL = ?",
-  [restaurant],
-  (err,result1)=>{
-    console.log(result1);
-    if (err) {
-      res.send({message:err})
-    }
-    else
-    {
-      const rest_id = result1[0].REST_ID; 
+  const rest_id = req.body.id; // token shit here
+  // db.query("SELECT REST_ID FROM R_CONTACT WHERE EMAIL = ?",
+  // [restaurant],
+  // (err,result1)=>{
+  //   console.log(result1);
+  //   if (err) {
+  //     res.send({message:err})
+  //   }
+  //   else
+  //   {
+      // const rest_id = result1[0].REST_ID; 
       db.query(
-        "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_ID = ?",
+        "SELECT FOOD_NAME, FOOD_PRICE, DISCOUNT FROM MENU WHERE REST_ID = ?",
         [rest_id],
         (err, result) => {
           console.log(result);
@@ -408,77 +408,87 @@ app.post("/landingpageforrestaurant", (req, res) => {
         }
       );
     }
-  })
+  // }
+  )
 
+
+// }
+// );
+
+app.post("/displaymenuforcustomer", (req, res) => {
+  
+  const restname = req.body.restname;
+  console.log(restname);
+  db.query("SELECT * FROM MENU WHERE REST_ID = (SELECT REST_ID FROM RESTAURANT WHERE REST_NAME = ?)",
+  [restname], 
+  (err,result) => {
+    if(err)
+    {
+      res.send({message:err})
+    }
+    else
+    {
+      console.log(result);
+      res.send(result);
+  }
+})
 
 });
 
 app.post("/addmenu", (req, res) => {
-  
+
+  const rest_id = req.body.id;
   const name = req.body.name;
-  const email = req.body.email;
   const price = req.body.price;
   const desc = req.body.description;
+  const discount = req.body.discount;
 
-  // db.connect((error) => {
-  //   if (!error) {
-    db.query("SELECT REST_ID FROM R_CONTACT WHERE EMAIL = (?)",
-    [email],
-    (err,result1) =>{
-      if (err) {
-        res.send({message:err})
-      }
-      else
-      {
-        const rest_id = result1[0].REST_ID;
-         db.query(
-          "INSERT INTO MENU (FOOD_NAME, FOOD_PRICE, DESCRIPTION, REST_ID) VALUES (?,?,?,?)",
-          [name, price, desc, rest_id],
-          (err, result) => {
-            if (err) {
-              res.send({ err: err });
-            } else {
-              res.send({message: "Item Inserted"});
-            }
-          }
-        );
-
-      }
-    })
-
-
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
-});
-
-
-app.post("/deletemenu", (req, res) => {
-  
-  const email = req.body.email;
-  const name = req.body.name;
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "DELETE FROM MENU WHERE REST_ID = (SELECT REST_ID FROM R_CONTACT WHERE EMAIL = ?) AND FOOD_NAME = ?",
-        [email, name],
+        db.query(
+        "INSERT INTO MENU (FOOD_NAME, FOOD_PRICE, DESCRIPTION, REST_ID, DISCOUNT) VALUES (?,?,?,?,?)",
+        [name, price, desc, rest_id, discount],
         (err, result) => {
           if (err) {
-            res.send({ message: err });
+            res.send({message:"Item not Inserted"});
           } else {
-            res.send({message: "Item Deleted!"})
+            res.send({message: "Item Inserted"});
           }
         }
       );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+    });
+
+app.post("/deletemenu", (req, res) => {
+  
+  const rest_id = req.body.id;
+  const name = req.body.name;
+      db.query(
+        "SELECT * FROM MENU WHERE REST_ID = ? AND FOOD_NAME = ?",
+        [rest_id, name],
+        (err, result) => {
+          if (err) {
+            res.send({message:"Item does not exist"});
+          } else {
+            if (result.length > 0) {
+              db.query(
+                "DELETE FROM MENU WHERE REST_ID = ? AND FOOD_NAME = ?",
+                [rest_id, name],
+                (err, result) => {
+                  if (err) {
+                    res.send({message:"Item not Deleted"});
+                  } else {
+                    res.send({message: "Item Deleted"});
+                  }
+                }
+              )
+            }
+            else
+            {
+              res.send({message: "Item does not exist"});
+            }
+
+          }
+        }
+      );
+
 });
 
 app.post("/selectedrestaurant", (req, res) => {
@@ -807,7 +817,7 @@ app.post("/deliverorder", (req, res) => {
 //////////////////////////////////////////
 
 app.post("/customerorderhistory", (req, res) => {
-  const cust = 1; // token shit here
+  const cust = req.body.id;
   //check if email doesnt exist
   db.query(
     "SELECT REST_NAME, STATUS_ORDER FROM RESTAURANT,ORDERS WHERE (RESTAURANT.REST_ID = ORDERS.REST_ID AND CUST_ID = ?)",
@@ -874,16 +884,15 @@ app.post("/addresschange", (req, res) => {
         else
         {
           const cust_id = result[0].CUST_ID;
-          console.log(cust_id);
           db.query(
             "UPDATE C_LOCATION SET AREA = ?, CITY = ?, STREET = ?, BUILDING = ? WHERE CUST_ID = ?",
             [area , city , street, building, cust_id],
             (err, result) => {
               if (err) {
-                res.send({ err: err });
+                res.send({message:"Incorrect Values" });
               } else 
               {
-                res.send({message: "Updated"})
+                res.send({message: "Address Updated"})
               }
             }
           );

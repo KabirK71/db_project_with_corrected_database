@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Axios from "axios";
 import logo from "../assets/logo_svg.svg";
+import { useNavigate } from "react-router-dom";
 
 export const Search = () => {
   const [restaurant, setRestaurant] = useState("");
+  const navigate = useNavigate();
 
   // make a state to store the search results
   const [searchResults, setSearchResults] = useState([]);
@@ -13,16 +15,21 @@ export const Search = () => {
 const obj = {r_name}
 
  */
+  const restGen = (restName) => {
+    localStorage.setItem("rest_name",  restName);
+    navigate('/displaymenuforcustomer');
+  }
 
-  const search = () => {
+  async function search (e) {
+    e.preventDefault();
     Axios.post("http://localhost:5000/search", {
       restaurant: restaurant,
     }).then((response) => {
       // set the searchResults state to the response.data
 
       console.log("here", response.data[0].email);
-      setSearchResults([...searchResults, []]);
-      setSearchResults([...searchResults, response.data[0].REST_NAME]);
+      // setSearchResults([...searchResults, []]);
+      setSearchResults([response.data[0].REST_NAME]);
       console.log("search res", searchResults);
       console.log(response);
     });
@@ -53,12 +60,14 @@ const obj = {r_name}
           Search
         </button>
       </div>
-      <label class="text-xl m-5 font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"> Search History</label>
+      <label class="text-xl m-5 font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"> Search Result</label>
       <div class="flex flex-col p-6 mx-auto w-2/3 text-center text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
         {searchResults.map((obj) => {
           return (
             <div >
-              <h1 class="text-gray-500 text-sm dark:text-gray-400 mb-3 text-center">{obj}</h1>
+              <button class="text-gray-500 text-sm dark:text-gray-400 mb-3 text-center" 
+              onClick={() => {restGen(obj)}}
+              >{obj}</button>
             </div>
           );
         })}

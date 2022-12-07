@@ -7,14 +7,13 @@ import { useNavigate } from "react-router-dom";
 export const COrderHistory = () => {
   const [orderHistory, setOrderHistory] = useState([]);
   const navigate = useNavigate();
+  const id = localStorage.getItem("id");
 
   useEffect(() => {
-    const config = {
-      headers: {
-        email: localStorage.getItem("email"),
-      },
-    }
-    Axios.post("http://localhost:5000/customerorderhistory", config).then((response) => {
+    console.log(id);
+    Axios.post("http://localhost:5000/customerorderhistory", {
+      id: id,
+    }).then((response) => {
       console.log(response.data.length);
       // for (let i = 0; i < response.data.length; i++) {
       // console.log(i);
@@ -23,9 +22,9 @@ export const COrderHistory = () => {
     });
   }, []);
 
-  const goHome = () => {
-    navigate("/landingpagecustomer");
-  };
+  // const goHome = () => {
+  //   navigate("/landingpagecustomer");
+  // };
 
   const orderList = orderHistory.map((item) => (
     <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 ">
@@ -48,15 +47,6 @@ export const COrderHistory = () => {
               <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Dastarkhwan</span>
             </a>
             <div class="flex items-center lg:order-2">
-              <button
-                href="#"
-                class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-              >
-                Log Out
-              </button>
-              <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                Profile
-              </button>
             </div>
             <div class="justify-between items-center w-full lg:flex lg:w-auto lg:order-1">
               <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">

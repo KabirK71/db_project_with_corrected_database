@@ -36,6 +36,7 @@ export const Login = () => {
     }).then((response) => {
       console.log(response.data);
       if (response.data.message === "User logged in") {
+        localStorage.setItem("id", response.data.id);
         localStorage.setItem("email", email);
         setLoginStatus(response.data.message);
         if (response.data.type === "customer")
@@ -43,7 +44,7 @@ export const Login = () => {
         else if (response.data.type === "rider")
           navigate("/landingpagerider");
         else if (response.data.type === "restaurant")
-          navigate("/landingpagerestaurant");
+          navigate("/landingpageforrestaurant");
       } else if (response.data.message === "Incorrect Email or Password") {
         //need to set state
         setLoginStatus(response.data.message);

@@ -18,6 +18,7 @@ import { VoucherGenerate } from './components/VoucherGenerate';
 import { AddMenu } from './components/AddMenu'
 import { DeleteMenu } from './components/DeleteMenu';
 import { LandingPageRestaurant } from './components/LandingPageRestaurant';
+// import { LandingPageForRestaurant } from './components/LandingPageForRestaurants';
 import Welcome from './components/Welcome';
 
 
