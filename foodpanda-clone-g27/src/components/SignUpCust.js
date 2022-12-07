@@ -29,16 +29,21 @@ export const SignUpCust = () => {
     // Promise.resolve(hashPassword(passwordReg))
     // .then((hashPwd) => {
       // setPasswordReg(hashPwd);
-      Axios.post("http://localhost:5000/register", {
+      Axios.post("http://localhost:5000/registercust", {
         email:emailReg, 
         password:passwordReg,
         firstname: firstName,
         lastname: lastName,
         phone:phone,
+        street:street,
+        city:city,
+        building:building,
+        area:area,
       }).then((response) => {
         console.log(response.data);
-        if (response.data === "EMAIL EXISTS") {
-          setSignupStatus(response.data);
+        if (response.data.message === "EMAIL EXISTS") {
+          alert("Email already exists");
+          setSignupStatus(response.data.message);
         } else {
           
           //implement local storage
@@ -155,6 +160,7 @@ export const SignUpCust = () => {
                 type="text"
                 name="street"
                 id="street"
+                required
                 placeholder="Street Name and Number"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 onChange={(e) => {
@@ -170,6 +176,7 @@ export const SignUpCust = () => {
                 type="text"
                 name="building"
                 id="building"
+                required
                 placeholder="Building Name"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 onChange={(e) => {

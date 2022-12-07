@@ -15,7 +15,6 @@ export const SignUpRest = () => {
   const [emailReg, setEmailReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const [restname, setRestName] = useState();
-  const [pricerating, setPriceRating] = useState();
   const [phone, setPhone] = useState();
   const [deliveryfee, setDeliveryFee] = useState();
   const [street, setStreet] = useState();
@@ -23,10 +22,16 @@ export const SignUpRest = () => {
   const [cuisine, setCuisine] = useState();
   const [building, setBuilding] = useState();
   const [area, setArea] = useState();
+  const [pricerating, setPriceRating] = useState();
+  const [rating, setRating] = useState();
   const [signupStatus, setSignupStatus] = useState("");
 
+
+  // generate random number between 0 and 5
+  const random = Math.floor(Math.random() * 5) + 1;
+
   const register = () => {
-    Axios.post("http://localhost:5000/restsignup", {
+    Axios.post("http://localhost:5000/registerrest", {
     restaurantname: restname,
     email: emailReg,
     password: passwordReg,
@@ -38,8 +43,18 @@ export const SignUpRest = () => {
     deliveryfee: deliveryfee,
     pricerating: pricerating,
     cuisine: cuisine,
+    rating: random,
+
     }).then((response) => {
-    console.log(response);
+
+      if (response.data.message === "EMAIL EXISTS") {
+        alert("Email already exists");
+        setSignupStatus(response.data.message);
+      }
+      else
+      {
+        navigate("/login");
+      }
     });
   };
 

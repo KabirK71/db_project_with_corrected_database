@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo_svg.svg";
 const bcrypt = require("bcryptjs");
 
-async function hashPassword(mypwd){
-  var hashPwd = await bcrypt.hash(mypwd,10);
-  console.log("THE HASHED PWD IS",hashPwd);
-  return hashPwd;
-}
+// async function hashPassword(mypwd){
+//   var hashPwd = await bcrypt.hash(mypwd,10);
+//   console.log("THE HASHED PWD IS",hashPwd);
+//   return hashPwd;
+// }
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -16,34 +16,43 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function login(e) {
+  // function handleOptionChange (changeEvent) {
+  //   this.setState({
+  //     selectedOption: changeEvent.target.value
+  //   });
+  // }
+
+
+
+  async function login (e) {
     e.preventDefault()
     // Promise.resolve(hashPassword(password))
     // .then((hashPwd) => {
     //   setPassword(hashPwd);0
     //   console.log("THE HASHED PWD IS",hashPwd);
-      Axios.post("http://localhost:5000/login", {
-        email: email,
-        password: password,
-      }).then((response) => {
-        console.log(response.data);
-        if(response.data.message === "User logged in"){
-          localStorage.setItem("email", email);
-          setLoginStatus(response.data.message); 
+    Axios.post("http://localhost:5000/login", {
+      email: email,
+      password: password,
+    }).then((response) => {
+      console.log(response.data);
+      if (response.data.message === "User logged in") {
+        localStorage.setItem("email", email);
+        setLoginStatus(response.data.message);
+        if (response.data.type === "customer")
           navigate("/landingpagecustomer");
-        }
-        else if (response.data.message === "Incorrect Email or Password")
-        {
-          //need to set state
-          setLoginStatus(response.data.message);
-          alert("Incorrect Email or Password");
-          // console.log("Wrong username/password combination");
-        }
-        });
+        else if (response.data.type === "rider")
+          navigate("/landingpagerider");
+        else if (response.data.type === "restaurant")
+          navigate("/landingpagerestaurant");
+      } else if (response.data.message === "Incorrect Email or Password") {
+        //need to set state
+        setLoginStatus(response.data.message);
+        alert("Incorrect Email or Password");
+        // console.log("Wrong username/password combination");
+      }
+    });
 
-    // });  
-    
-    
+    // });
   };
 
   return (

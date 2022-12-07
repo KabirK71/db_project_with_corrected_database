@@ -20,29 +20,26 @@ export const SignUpRider = () => {
   const [phone, setPhone] = useState();
   const [signupStatus, setSignupStatus] = useState("");
   
-  async function register (e) {
-    // e.preventDefault()
-    // // Promise.resolve(hashPassword(passwordReg))
-    // // .then((hashPwd) => {
-    //   // setPasswordReg(hashPwd);
-    //   Axios.post("http://localhost:5000/register", {
-    //     email:emailReg, 
-    //     password:passwordReg,
-    //     firstname: firstName,
-    //     lastname: lastName,
-    //     phone:phone,
-    //   }).then((response) => {
-    //     console.log(response.data);
-    //     if (response.data === "EMAIL EXISTS") {
-    //       setSignupStatus(response.data);
-    //     } else {
-          
-    //       //implement local storage
-    //       // localStorage.setItem("email", JSON.stringify(response.data));
-    //       navigate("/login");
-    //     }
-    //   });
-    // // });        
+
+  const register = () => {
+    Axios.post("http://localhost:5000/registerrider", {
+      email:emailReg, 
+      password:passwordReg,
+      firstname: firstName,
+      lastname: lastName,
+      phone:phone,
+
+    }).then((response) => {
+
+      if (response.data.message === "EMAIL EXISTS") {
+        alert("Email already exists");
+        setSignupStatus(response.data.message);
+      }
+      else
+      {
+        navigate("/login");
+      }
+    });
   };
 
   return (

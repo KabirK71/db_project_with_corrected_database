@@ -15,16 +15,14 @@ const db = mysql.createConnection({
   database: "foodpanda",
 });
 
-const handleNewUserSignUp = (email, password, f_name, l_name, phone, res) => {            
+const handleNewCustSignUp = (email, password, f_name, l_name, phone,street, building, area, city, res) => {            
           db.query(
             `CREATE DATABASE IF NOT EXISTS foodpanda`,
             async (err2, result) => {
               if (err2) {
                 console.log(err2);
               } else {
-                console.log("Database Created");
                 try {
-                  //call create table here using await like done below here.
                   db.query("USE foodpanda");
                   db.query("SELECT * FROM C_CONTACT WHERE EMAIL = ?",
                   [email],
@@ -52,6 +50,14 @@ const handleNewUserSignUp = (email, password, f_name, l_name, phone, res) => {
                         console.log(err || result);
                       }
                     );
+                    db.query(
+                      "INSERT INTO C_LOCATION (CITY, AREA, STREET, BUILDING) VALUES (?,?,?,?);",
+                      [city, area, street, building],
+                      (err, result) => {
+                        console.log(err || result);
+                      }
+                    );
+                    
                     res.send(email);
                   }})
                 } catch (err) {
@@ -65,13 +71,144 @@ const handleNewUserSignUp = (email, password, f_name, l_name, phone, res) => {
       // })
 };
 
-app.post("/register", (req, res) => {
+const handleNewRestSignUp = (email, password, restaurantname, phone,street, building, area, city, deliveryfee, pricerating, cuisine, rating, res) => {            
+  db.query(
+    `CREATE DATABASE IF NOT EXISTS foodpanda`,
+    async (err2, result) => {
+      if (err2) {
+        console.log(err2);
+      } else {
+        try {
+          db.query("USE foodpanda");
+          db.query("SELECT * FROM R_CONTACT WHERE EMAIL = ?",
+          [email],
+          (err,result)=>{
+          if (err) {
+            res.send({message:err})
+          }
+          else if (result.length > 0)
+          {
+            res.send({message:"EMAIL EXISTS"})
+          }
+          else
+          {
+            db.query(
+              "INSERT INTO RESTAURANT (REST_NAME, CUISINES, PRICE_RATING, DELIVERY_FEE, REST_RATING) VALUES (?,?,?,?,?);",
+              [restaurantname, cuisine, pricerating, deliveryfee, rating],
+              (err, result) => {
+                console.log(err || result);
+              }
+            );
+            db.query(
+              "INSERT INTO R_CONTACT (PHONE_NO, EMAIL, PWD) VALUES (?,?,?);",
+              [phone, email, password],
+              (err, result) => {
+                console.log(err || result);
+              }
+            );
+            db.query(
+              "INSERT INTO R_LOCATION (CITY, AREA, STREET, BUILDING) VALUES (?,?,?,?);",
+              [city, area, street, building],
+              (err, result) => {
+                console.log(err || result);
+              }
+            );
+            
+            res.send(email);
+          }})
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
+  );
+};
+
+const handleNewRiderSignUp = (email, password, f_name, l_name, phone, res) => {            
+  db.query(
+    `CREATE DATABASE IF NOT EXISTS foodpanda`,
+    async (err2, result) => {
+      if (err2) {
+        console.log(err2);
+      } else {
+        try {
+          db.query("USE foodpanda");
+          db.query("SELECT * FROM RD_CONTACT WHERE EMAIL = ?",
+          [email],
+          (err,result)=>{
+          if (err) {
+            res.send({message:err})
+          }
+          else if (result.length > 0)
+          {
+            res.send({message:"EMAIL EXISTS"})
+          }
+          else
+          {
+            db.query(
+              "INSERT INTO RIDER (FIRST_NAME, LAST_NAME) VALUES (?,?);",
+              [f_name, l_name],
+              (err, result) => {
+                console.log(err || result);
+              }
+            );
+            db.query(
+              "INSERT INTO RD_CONTACT (PHONE_NO, EMAIL, PWD) VALUES (?,?,?);",
+              [phone, email, password],
+              (err, result) => {
+                console.log(err || result);
+              }
+            );            
+            res.send(email);
+          }})
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
+  );
+};
+
+app.post("/registercust", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const f_name = req.body.firstname;
   const l_name = req.body.lastname;
   const phone = req.body.phone
-  handleNewUserSignUp(email, password, f_name, l_name, phone, res);
+  const street = req.body.street;
+  const building = req.body.building;
+  const area = req.body.area;
+  const city = req.body.city;
+  handleNewCustSignUp(email, password, f_name, l_name, phone,street, building, area, city, res);
+});
+
+app.post("/registerrest", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const restaurantname = req.body.restaurantname;
+  const phone = req.body.phone
+  const street = req.body.street;
+  const building = req.body.building;
+  const area = req.body.area;
+  const city = req.body.city;
+  const deliveryfee = req.body.deliveryfee;
+  const pricerating = req.body.pricerating;
+  const cuisine = req.body.cuisine;
+  const rating = req.body.rating;
+
+  handleNewRestSignUp(email, password, restaurantname, phone,street, building, area, city, deliveryfee, pricerating, cuisine, rating, res);
+  
+});
+
+app.post("/registerrider", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const f_name = req.body.firstname;
+  const l_name = req.body.lastname;
+  const phone = req.body.phone
+
+  handleNewRiderSignUp(email, password, f_name, l_name, phone,res);
+  
 });
 
 
@@ -100,28 +237,55 @@ app.post("/vouchergenerate", (req, res) => {
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  console.log("The hash is: ",password);
+  var flag = 1;
     db.query(
       "SELECT * FROM C_CONTACT WHERE EMAIL = ? AND PWD = ?",
       [email, password],
       (err, result) => {
-        console.log(result);
         if (err) {
           res.send({ err: err });
         } else {
           if (result.length > 0) {
-              // console.log(result);
-              // console.log("User logged in");
-              res.send({message: "User logged in"});
-            }
+            res.send({message: "User logged in", type: "customer"});
+          }
           else
-            {
-              res.send({message:"Incorrect Email or Password"});
-            }
-           
-        }
-      }
-    ); 
+          {
+            db.query(
+              "SELECT * FROM R_CONTACT WHERE EMAIL = ? AND PWD = ?",
+              [email, password],
+              (err, result) => {
+                if (err) {
+                  res.send({ err: err });
+                } else {
+                  if (result.length > 0) {
+                      res.send({message: "User logged in", type: "restaurant"});
+                    }
+                  else
+                  {
+                    db.query(
+                      "SELECT * FROM RD_CONTACT WHERE EMAIL = ? AND PWD = ?",
+                      [email, password],
+                      (err, result) => {
+                        if (err) {
+                          res.send({ err: err });
+                        } else {
+                          if (result.length > 0) {
+                              res.send({message: "User logged in", type: "rider"});
+                            }
+                          else
+                          {
+                            res.send({message: "User not found"});
+                          }
+                        }});
+
+                  }
+                }});
+
+          }
+
+        }});
+
+      
 });
 
 app.post("/restsignup", (req, res) => {
