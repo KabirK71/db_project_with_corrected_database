@@ -214,21 +214,20 @@ app.post("/registerrider", (req, res) => {
 
 app.post("/vouchergenerate", (req, res) => {
   const code = req.body.voucher;
-  const restaurant = req.body.restaurant;
+  const rest_id = req.body.id
   const deduct = req.body.deduct;
 
   //check if email doesnt exist
   db.query(
-    "INSERT INTO VOUCHER(CODE, REST_ID, DEDUCT) VALUES (?,?,?)",
-    [code,restaurant,deduct], (err, result)=>{
-      console.log(err||result);
+    "INSERT INTO VOUCHER(CODE, REST_ID, PERCENT_DEDUCTION) VALUES (?,?,?)",
+    [code,rest_id,deduct], (err, result)=>{
       if (err)
       {
-        res.send({message:"error"});
+        res.send({message:"Voucher not generated"});
       }
       else
       {
-        res.send({message:"settay"});
+        res.send({message:"Voucher generated"});
       }
     }
     );
@@ -628,7 +627,7 @@ app.post("/voucher", (req, res) => {
   const code = req.body.code;
   
   // db.connect((error) => {
-  //   if (!error) {
+  //   if (!error) {voucher
       db.query(
         "SELECT PERCENT_DEDUCTION FROM VOUCHER WHERE CODE = ?",
         [code],

@@ -4,16 +4,21 @@ import Axios from "axios";
 
 export const VoucherGenerate = () => {
     const [voucher, setVoucher] = useState("");
-    const [restaurant, setRestaurant] = useState("");
     const [deduct, setDeduct] = useState("");
+
+    const id = localStorage.getItem("id");
 
     const generate = () => {
         Axios.post("http://localhost:5000/vouchergenerate", {
         voucher: voucher,
-        restaurant: restaurant,
+        id: id,
         deduct: deduct,
         }).then((response) => {
-        console.log(response);
+        if (response.data.message === "Voucher not generated") {
+            alert("Voucher not generated");
+        } else {
+            alert("Voucher generated");
+        }
         });
     };
 
@@ -30,16 +35,6 @@ export const VoucherGenerate = () => {
             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             onChange={(e) => {
             setVoucher(e.target.value);
-            }}
-        />
-        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Restaurant ID</label>
-        <input
-            type="email"
-            name="email"
-            placeholder="Email ID"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            onChange={(e) => {
-            setRestaurant(e.target.value);
             }}
         />
         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Percentage To Deduct</label>
