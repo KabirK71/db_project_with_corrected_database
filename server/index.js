@@ -11,7 +11,7 @@ app.use(cors());
 const db = mysql.createConnection({
   user: "root",
   host: "localhost",
-  password: "mrm71101",
+  password: "Kabir@123",
   database: "foodpanda",
 });
 
@@ -523,34 +523,41 @@ app.post("/selectedrestaurant", (req, res) => {
 
 app.post("/addtocart", (req, res) => {
   
-  const restaurant = req.body.restaurant;
-  const food = req.body.food;
-  const price = req.body.price;
-  const customer = req.body.customer;
+  const restaurant = req.body.restname;
+  const food = req.body.food_name;
+  const price = req.body.food_price;
+  const customer = 1;
   const quantity = req.body.quantity;
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "INSERT INTO CART (FOOD_NAME, FOOD_PRICE, QUANTITY, CUST_ID, REST_ID) VALUES (?,?,?,?,?) ; INSERT INTO CART (FOOD_ID) VALUES (SELECT FOOD_ID FROM MENU WHERE REST_ID = ?)",
-        [food, price, quantity, customer, restaurant , restaurant],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send({message: "added to cart"});
-            } else {
-              res.send({ message: "Could not add to cart" });
-            }
+  
+  db.query(
+    "SELECT * FROM MENU WHERE FOOD_NAME = ? AND REST_ID = (SELECT REST_ID FROM RESTAURANT WHERE REST_NAME = ?)", 
+    [food,restaurant],
+    (err,result) =>
+    {
+      // console.log("here");
+      if (err)
+      {
+        res.send({message : err})
+      }
+      else
+      {
+        db.query("INSERT INTO CART (CUST_ID, REST_ID, FOOD_ID, FOOD_NAME, QUANTITY, PRICE) VALUES (?,?,?,?,?,?)",
+        [customer, result[0].REST_ID, result[0].FOOD_ID, food, quantity, price],
+        (err,result2) =>
+        {
+          if(err)
+          {
+            res.send({message:err})
           }
-        }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+          else
+          {
+            res.send({message: "added to cart"});
+          }
+        });
+      }
+    }
+  );
+
 });
 
 
@@ -562,8 +569,7 @@ app.post("/deletefromcart", (req, res) => {
   const food = req.body.food;
   const customer = req.body.customer;
   
-  // db.connect((error) => {
-  //   if (!error) {
+
       db.query(
         "DELETE FROM CART WHERE CUST_ID = ? AND FOOD_NAME = ? AND REST_ID = ?",
         [food, customer, restaurant],
@@ -579,44 +585,123 @@ app.post("/deletefromcart", (req, res) => {
           }
         }
       );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+
 });
 
 
-
-app.post("/cart", (req, res) => {
+app.post("/customercart", (req, res) => {
   
-  const customer = req.body.customer;
+  const customer = 1;
   
-  // db.connect((error) => {
-  //   if (!error) {
       db.query(
-        "SELECT FOOD_NAME, FOOD_PRICE, QUANITY FROM CART WHERE CUST_ID = ?",
+        "SELECT * FROM CART WHERE CUST_ID = ?",
         [customer],
         (err, result) => {
           if (err) {
+            // console.log("err")
             res.send({ err: err });
           } else {
+            // console.log(result)
             if (result.length > 0) {
-              res.send({message: "this is cart"});
+              res.send(result);
             } else {
               res.send({ message: "Could not display cart" });
             }
           }
         }
       );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
 });
+
+
+
+
+app.post("/deletefromcustomercart", (req, res) => {
+  
+  const customer = 1;
+  const foodname = req.body.foodname;
+  const quantity = req.body.quantity;
+  
+      db.query(
+        "DELETE FROM CART WHERE CUST_ID = ? AND FOOD_NAME = ? AND QUANTITY = ?",
+        [customer, foodname, quantity],
+        (err, result) => {
+          if (err) 
+          {
+            res.send({ message: err });
+          } else 
+          {
+            res.send({ message: "success" });
+          }
+        }
+      );
+});
+
+
+
+// i think i removed the whole thing from my version -- aashish
+// app.post("/cart", (req, res) => {
+  
+//   const customer = req.body.customer;
+  
+//   // db.connect((error) => {
+//   //   if (!error) {
+//       db.query(
+//         "SELECT FOOD_NAME, FOOD_PRICE, QUANITY FROM CART WHERE CUST_ID = ?",
+//         [customer],
+//         (err, result) => {
+//           if (err) {
+//             res.send({ err: err });
+//           } else {
+//             if (result.length > 0) {
+//               res.send({message: "this is cart"});
+//             } else {
+//               res.send({ message: "Could not display cart" });
+//             }
+//           }
+//         }
+//       );
+//   //   } else {
+//   //     console.log("Connection failed");
+//   //     console.log(error);
+//   //   }
+//   // });
+//   // db.end();
+// });
+
+
+
+
+app.post("/placeorder", (req, res) => {
+  const cust = 1;
+  const today = new Date();
+  db.query("INSERT INTO ORDERS (CUST_ID, REST_ID, FOOD_ID, FINAL_PRICE , COUNT_ORDER) SELECT CUST_ID, REST_ID, FOOD_ID, PRICE*QUANTITY, QUANTITY FROM CART WHERE CUST_ID = ?",
+  [cust], (err, result) =>{
+    if (err)
+    {
+      console.log(err);
+    }
+    else
+    {
+      console.log("success");
+    }
+  });
+  db.query("UPDATE ORDERS SET TIMENDATE = ?, STATUS_ORDER = 'DELIVERING' WHERE CUST_ID = ?",
+  [today.getHours() + ":" + today.getMinutes(), cust],
+  (err,result)=>{
+    if(err)
+    {
+      console.log(err);
+    }
+    else
+    {
+      console.log("success");
+    }
+  });
+  db.query("DELETE FROM CART WHERE CUST_ID = ?",[cust]);
+
+
+});
+
 
 
 
@@ -933,6 +1018,30 @@ app.post("/updatepassword", (req, res) => {
       );
 
 });
+
+
+
+
+
+app.post("/displaymenuforcustomer", (req, res) => {
+  
+  const restname = req.body.restname;
+  db.query("SELECT * FROM MENU WHERE REST_ID = (SELECT REST_ID FROM RESTAURANT WHERE REST_NAME = ?)",
+  [restname], 
+  (err,result) => {
+    if(err)
+    {
+      res.send({message:err})
+    }
+    else
+    {
+      res.send(result);
+    }
+  }) 
+
+});
+
+
 
 
 

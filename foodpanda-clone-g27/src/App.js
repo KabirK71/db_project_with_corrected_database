@@ -21,6 +21,8 @@ import { LandingPageRestaurant } from './components/LandingPageRestaurant';
 import { Help } from './components/Help';
 // import { LandingPageForRestaurant } from './components/LandingPageForRestaurants';
 import Welcome from './components/Welcome';
+import { CustomerCart } from './components/CustomerCart';
+import { DisplayMenuForCustomer } from './components/DisplayMenuForCustomer';
 
 
 export default function App() {
@@ -45,6 +47,8 @@ export default function App() {
         <Route path="/detailchange" element={<DetailChange />} />
         <Route path="/landingpageforrestaurant" element={<LandingPageRestaurant />} />
         <Route path="/help" element={<Help />} />
+        <Route path="/displaymenuforcustomer" element= {<DisplayMenuForCustomer/>} />
+        <Route path="/customercart" element= {<CustomerCart/>} />
 
       </Routes>
     </Router>
