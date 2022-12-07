@@ -37,7 +37,7 @@ export function SelectUser() {
               <h3 class="mb-4 text-2xl font-semibold">Restaurant Owner</h3>
               <p class="font-light text-gray-500 sm:text-lg dark:text-gray-400 mb-3">Register your restaurant to Dastarkhwan and manage your orders!</p>
                 <button class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-primary-900"
-                onClick={restaurant}>>
+                onClick={restaurant}>
                   Get started
                 </button>
             </div>
