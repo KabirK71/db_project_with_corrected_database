@@ -2,18 +2,13 @@ const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
 const { response } = require("express");
-
+require ("dotenv").config()
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-const db = mysql.createConnection({
-  user: "root",
-  host: "localhost",
-  password: "Kabir@123",
-  database: "foodpanda",
-});
+const db = mysql.createConnection(process.env.MYSQL_CON_STRING);
 
 const handleNewCustSignUp = (email, password, f_name, l_name, phone,street, building, area, city, res) => {            
           db.query(
