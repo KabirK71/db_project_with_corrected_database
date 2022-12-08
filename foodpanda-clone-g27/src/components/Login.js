@@ -45,7 +45,7 @@ export const Login = () => {
           navigate("/landingpageforrider");
         else if (response.data.type === "restaurant")
           navigate("/landingpageforrestaurant");
-      } else if (response.data.message === "Incorrect Email or Password") {
+      } else if (response.data.message === "User not found") {
         //need to set state
         setLoginStatus(response.data.message);
         alert("Incorrect Email or Password");

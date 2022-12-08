@@ -53,7 +53,7 @@ export const DisplayMenuForCustomer = () =>
 
 
     const menu = searchResults.map((item) => (
-        <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 ">
+        <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 flex flex-row">
           <button
             class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white hover:bg-gray-50">
             <p href="" class="mb-4 text-md font-semibold">
@@ -62,10 +62,10 @@ export const DisplayMenuForCustomer = () =>
             <p class="text-gray-500 text-sm dark:text-gray-400 mb-3 font-bold">{item.FOOD_NAME}</p>
             <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">{item.FOOD_PRICE} Rs.</p>
             <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Chef's Note: {item.DESCRIPTION}</p>
-            <input type="number" placeholder="Enter Quantity" onChange={(e) => {setQuan(e.target.value)
+            <input class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-1/3 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="number" placeholder="Enter Quantity" onChange={(e) => {setQuan(e.target.value)
             }}/>
 
-            <button class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white hover:bg-gray-50" onClick={()=>{
+            <button class="w-40 h-10 flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white hover:bg-pink-600 text-center justify-center" onClick={()=>{
                 callingAddToCart(item.FOOD_NAME, quan, item.FOOD_PRICE);
             }}>Add to cart</button>
 
@@ -76,9 +76,9 @@ export const DisplayMenuForCustomer = () =>
 
 
     return (
-        <div className="DisplayMenuCustomer">
+        <div className="DisplayMenuCustomer" class="p-5">
         <div>{menu}</div>
-        <button  class="block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white" onClick={redirectToCart} >Go to Cart</button>
+        <div class="flex flex-row justify-center"><button  class="w-30 block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-primary-700 lg:text-white lg:p-0 dark:text-white" onClick={redirectToCart} ><h2 class="px-2 py-2">Go to Cart</h2></button></div>
         </div>
     );
 

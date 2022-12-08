@@ -11,7 +11,7 @@ app.use(cors());
 const db = mysql.createConnection({
   user: "root",
   host: "localhost",
-  password: "mrm71101",
+  password: "Kabir@123",
   database: "foodpanda",
 });
 
@@ -241,7 +241,7 @@ app.post("/login", (req, res) => {
       [email, password],
       (err, result) => {
         if (err) {
-          res.send({ err: err });
+          res.send({ message: "User not found" });
         } else {
           if (result.length > 0) {
             res.send({message: "User logged in", type: "customer", id: result[0].CUST_ID});

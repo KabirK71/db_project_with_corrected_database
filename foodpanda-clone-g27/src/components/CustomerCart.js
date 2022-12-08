@@ -74,14 +74,15 @@ export const CustomerCart = () =>
 
 
     return (
-        <div className="DisplayMenuCustomer">
+        <div className="DisplayMenuCustomer" class="p-2">
         <div>{cart}</div>
+        <div class="flex flex-row justify-center">
         <button onClick={backtomenu}
-        class="block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white">Back to Restaurant Menu</button>
-        <br></br>
+        class="w-30 block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-primary-700 lg:text-white lg:p-0 dark:text-white"><h2 class="p-2">Back to Restaurant Menu</h2></button>
+        {/* <br></br> */}
         <button onClick={placeorder}
-        class="block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white">Place Order</button>
-        
+        class="w-30 block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-primary-700 lg:text-white lg:p-0 dark:text-white"><h2 class="p-2">Place Order</h2></button>
+        </div>
         </div>
     );
 }
