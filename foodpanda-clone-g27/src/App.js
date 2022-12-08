@@ -30,7 +30,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/https://dastarkhwan-g27.herokuapp.com/" element={<Welcome/>}/>
+        <Route path="https://dastarkhwan-g27.herokuapp.com/" element={<Welcome/>}/>
         <Route path="/login" element={<Login />} />
         <Route path="/signupcust" element={<SignUpCust />} />
         <Route path="/signuprest" element={<SignUpRest />} />
