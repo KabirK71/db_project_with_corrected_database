@@ -163,9 +163,7 @@ const handleNewRiderSignUp = (email, password, f_name, l_name, phone, res) => {
     }
   );
 };
-app.post("/", (req, res) => {
-  res.send("working now");
-});
+
 
 app.post("/registercust", (req, res) => {
   const email = req.body.email;
