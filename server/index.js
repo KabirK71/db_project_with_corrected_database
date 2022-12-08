@@ -945,7 +945,7 @@ app.post("/displaymenuforcustomer", (req, res) => {
 
 
 
-app.listen(5000, () => {
-  console.log("Server started at Port 5000");
+app.listen(process.env.PORT, () => {
+  console.log("Server started at Port " + process.env.PORT);
   // console.log(db.state);
 });
