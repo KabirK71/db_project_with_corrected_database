@@ -162,9 +162,11 @@ export const LandingPageCustomer = () => {
 
   useEffect(() => {
     Axios.post("http://localhost:5000/landingpageforcustomers").then((response) => {
-      // console.log(response);
+      console.log(response);
       // console.log("rendered");
-      setSearchResults(...searchResults, response.data);
+      if(response.data.length > 0){
+        setSearchResults(...searchResults, response.data);
+      }
       // console.log("this is search results", searchResults);
     });
   }, []);
@@ -190,9 +192,17 @@ export const LandingPageCustomer = () => {
     navigate("/detailchange");
   };
 
+  const AddressChange = () => {
+    navigate("/addresschange");
+  };
+
   const logout = () => {
     navigate("/login");
     localStorage.clear();
+  };
+
+    const Help = () => {
+    navigate("/help");
   };
 
   const search = () => {
@@ -238,7 +248,19 @@ export const LandingPageCustomer = () => {
                 class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                 onClick={detailChange}
               >
-                Edit Profile
+                Edit Password
+              </button>
+              <button
+                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                onClick={AddressChange}
+              >
+                Edit Address
+              </button>
+              <button
+                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                onClick={Help}
+              >
+                Contact Help Center
               </button>
             </div>
             <div class="justify-between items-center w-full lg:flex lg:w-auto lg:order-1">

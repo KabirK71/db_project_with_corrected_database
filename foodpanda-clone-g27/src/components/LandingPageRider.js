@@ -3,12 +3,9 @@ import { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo_svg.svg";
-import { FaTrashAlt, FaEdit } from "react-icons/fa"
-import { VoucherGenerate } from "./VoucherGenerate";
 
-export const LandingPageRestaurant = () => {
+export const LandingPageRider = () => {
   const [searchResults, setSearchResults] = useState([]);
-  const [restaurant, setRestaurant] = useState("");
   const id = localStorage.getItem("id");
   const navigate = useNavigate();
 
@@ -17,39 +14,35 @@ export const LandingPageRestaurant = () => {
     localStorage.clear();
   };
 
-  const AddMenu = () => {
-    navigate("/addmenu");
+  const DetailChange = () => {
   };
 
-  const DeleteMenu = () => {
-    navigate("/deletemenu");  
-  };
 
-  const GenerateVoucher = () => {
-    navigate("/vouchergenerate");
-  };
+  // useEffect(() => {
+  //   Axios.post("http://localhost:5000/landingpageforrider", {
+  //     id: id,
+  //   }).then((response) => {
+  //   console.log(response); 
+  //   if(response.data.length > 0){
+  //     setSearchResults(...searchResults, response.data);
+  //   }
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    Axios.post("http://localhost:5000/landingpageforrestaurant", {
-      id: id,
-    }).then((response) => {
-    console.log(response); 
-    if(response.data.length > 0){
-      setSearchResults(...searchResults, response.data);
-    }
-    });
-  }, []);
+  // searchResults = [];
   
-  const restList = searchResults.map((item, index) => (
-      <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 " key={index}>
-        <div class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
-          <p href="" class="flex flex-row mb-4 text-md font-semibold">{item.FOOD_NAME}</p>       
-          <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Rs: {item.FOOD_PRICE}</p>
-          <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Discount: {item.DISCOUNT}%</p>
-          <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Description: {item.DESCRIPTION}</p>
-        </div>
-      </div>
-  ));
+  // const riderList = searchResults.map((item, index) => (
+  //     <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 " key={index}>
+  //       <div class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
+  //         <p href="" class="flex flex-row mb-4 text-md font-semibold">{item.FOOD_NAME}</p>       
+  //         <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Rs: {item.FOOD_PRICE}</p>
+  //         <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Discount: {item.DISCOUNT}%</p>
+  //         <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Description: {item.DESCRIPTION}</p>
+  //       </div>
+  //     </div>
+  // ));
+
+  const riderList = [];
 
   return (
     <div className="LandingPageForCustomers" class="bg-white dark:bg-gray-900 ">
@@ -68,14 +61,8 @@ export const LandingPageRestaurant = () => {
               >
                 Log Out
               </button>
-              <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" onClick={AddMenu}>
-                Add Menu
-              </button>
-              <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" onClick={DeleteMenu}>
-                Delete Menu
-              </button>
-              <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" onClick={GenerateVoucher}>
-                Generate Voucher
+              <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" onClick={DetailChange}>
+                Change Password
               </button>
             </div>
             <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
@@ -100,9 +87,9 @@ export const LandingPageRestaurant = () => {
       </header>
       <section class="bg-white dark:bg-gray-900 justify-items-center py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
           <div class="flex flex-col lg:flex-row">
-            <h2 class="mx-auto max-w-screen-md font-semibold mt-2 text-lg lg:mb-12">Menu</h2> 
+            <h2 class="mx-auto max-w-screen-md font-semibold mt-2 text-lg lg:mb-12">Deliveries Available</h2> 
           </div>
-          <div>{restList.length ? restList : <div>No Menu Found</div>}</div>
+          <div>{riderList.length ? riderList : <div>No Order to Deliver</div>}</div>
       </section>
 
     </div>

@@ -7,6 +7,7 @@ export const CustomerCart = () =>
 {
     const navigate = useNavigate();
     const [searchResults, setSearchResults] = useState([])
+    const cust_id = localStorage.getItem("id");
     
     const backtomenu = () =>{
         navigate('/displaymenuforcustomer')
@@ -14,28 +15,34 @@ export const CustomerCart = () =>
     const placeorder = () =>
     {
         Axios.post("http://localhost:5000/placeorder",{
+            id: cust_id,
         }).then((response) =>{
             console.log(response)
-            setSearchResults(...searchResults, response.data);
+            if (response.data.length > 0) {
+              setSearchResults(...searchResults, response.data);
+            }
         });
-        // navigate('/displaymenuforcustomer')
+        navigate('/customerorderhistory')
            
     }
 
 
 
     useEffect (()=>{
-        Axios.post("http://localhost:5000/customercart",{
+        Axios.post("http://localhost:5000/customercart",{ 
+            id: cust_id,
         }).then((response) =>{
             console.log(response)
-            setSearchResults(...searchResults, response.data);
+            if(response.data.length > 0)
+              setSearchResults(...searchResults, response.data);
         });
     }, []);
 
     const deletefromcart = (foodname, quantity)=>
     {
-        Axios.post("http://localhost:5000/deletefromcustomercart",
+        Axios.post("http://localhost:5000/deletefromcustomercart", 
         {
+            id: cust_id,
             foodname:foodname,
             quantity:quantity
             // customer:customer,
@@ -43,6 +50,7 @@ export const CustomerCart = () =>
             console.log(response)
             setSearchResults(...searchResults, response.data);
         });
+        window.location.reload();
     }
 
 
@@ -57,7 +65,7 @@ export const CustomerCart = () =>
             <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">PRICE: {item.PRICE} Rs.</p>
             <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">QUANTITY: {item.QUANTITY}</p>
 
-            <button  class="block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white" onClick={()=>{deletefromcart(item.FOOD_NAME , item.QUANTITY)}}>Remove</button>
+            <button  class="block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white" onClick={()=>{deletefromcart(item.FOOD_NAME , item.QUANTITY); navigate("/customercart")}}>Remove</button>
 
           </button>
         </div>
@@ -68,14 +76,15 @@ export const CustomerCart = () =>
     return (
         <div className="DisplayMenuCustomer">
         <div>{cart}</div>
-        <button onClick={backtomenu}>Back to restaurant menu</button>
+        <button onClick={backtomenu}
+        class="block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white">Back to Restaurant Menu</button>
         <br></br>
-        <button onClick={placeorder}>place order</button>
+        <button onClick={placeorder}
+        class="block py-2 mx-5 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white">Place Order</button>
         
         </div>
     );
-
-
-
-
 }
+
+
+//create table cart (CUST_ID INT NOT NULL, FOOD_ID INT, REST_ID INT, QUANTITY INT, FOOD_NAME VARCHAR(255));

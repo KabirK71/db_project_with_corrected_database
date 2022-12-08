@@ -18,6 +18,7 @@ import { VoucherGenerate } from './components/VoucherGenerate';
 import { AddMenu } from './components/AddMenu'
 import { DeleteMenu } from './components/DeleteMenu';
 import { LandingPageRestaurant } from './components/LandingPageRestaurant';
+import { LandingPageRider } from './components/LandingPageRider';
 import { Help } from './components/Help';
 // import { LandingPageForRestaurant } from './components/LandingPageForRestaurants';
 import Welcome from './components/Welcome';
@@ -46,6 +47,7 @@ export default function App() {
         <Route path="/deletemenu" element={<DeleteMenu />} />
         <Route path="/detailchange" element={<DetailChange />} />
         <Route path="/landingpageforrestaurant" element={<LandingPageRestaurant />} />
+        <Route path="/landingpageforrider" element={<LandingPageRider />} />
         <Route path="/help" element={<Help />} />
         <Route path="/displaymenuforcustomer" element= {<DisplayMenuForCustomer/>} />
         <Route path="/customercart" element= {<CustomerCart/>} />

@@ -11,7 +11,7 @@ app.use(cors());
 const db = mysql.createConnection({
   user: "root",
   host: "localhost",
-  password: "Kabir@123",
+  password: "mrm71101",
   database: "foodpanda",
 });
 
@@ -236,7 +236,6 @@ app.post("/vouchergenerate", (req, res) => {
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  var flag = 1;
     db.query(
       "SELECT * FROM C_CONTACT WHERE EMAIL = ? AND PWD = ?",
       [email, password],
@@ -379,25 +378,13 @@ app.post("/landingpageforcustomers", (req, res) => {
 app.post("/landingpageforrestaurant", (req, res) => {
   
   const rest_id = req.body.id; // token shit here
-  // db.query("SELECT REST_ID FROM R_CONTACT WHERE EMAIL = ?",
-  // [restaurant],
-  // (err,result1)=>{
-  //   console.log(result1);
-  //   if (err) {
-  //     res.send({message:err})
-  //   }
-  //   else
-  //   {
-      // const rest_id = result1[0].REST_ID; 
       db.query(
-        "SELECT FOOD_NAME, FOOD_PRICE, DISCOUNT FROM MENU WHERE REST_ID = ?",
+        "SELECT FOOD_NAME, FOOD_PRICE, DISCOUNT, DESCRIPTION FROM MENU WHERE REST_ID = ?",
         [rest_id],
         (err, result) => {
-          console.log(result);
           if (err) {
             res.send({ message: err });
           } else {
-            // console.log(result);
             if (result.length > 0) {
               res.send(result);
             } else {
@@ -407,17 +394,12 @@ app.post("/landingpageforrestaurant", (req, res) => {
         }
       );
     }
-  // }
   )
 
-
-// }
-// );
 
 app.post("/displaymenuforcustomer", (req, res) => {
   
   const restname = req.body.restname;
-  console.log(restname);
   db.query("SELECT * FROM MENU WHERE REST_ID = (SELECT REST_ID FROM RESTAURANT WHERE REST_NAME = ?)",
   [restname], 
   (err,result) => {
@@ -493,9 +475,7 @@ app.post("/deletemenu", (req, res) => {
 app.post("/selectedrestaurant", (req, res) => {
   
   const restaurant = req.body.restaurant;
-  
-  // db.connect((error) => {
-  //   if (!error) {
+
       db.query(
         "SELECT FOOD_NAME, FOOD_PRICE FROM MENU WHERE REST_NAME = ?",
         [restaurant],
@@ -511,12 +491,7 @@ app.post("/selectedrestaurant", (req, res) => {
           }
         }
       );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+
 });
 
 
@@ -526,7 +501,7 @@ app.post("/addtocart", (req, res) => {
   const restaurant = req.body.restname;
   const food = req.body.food_name;
   const price = req.body.food_price;
-  const customer = 1;
+  const customer = req.body.id;
   const quantity = req.body.quantity;
   
   db.query(
@@ -534,7 +509,6 @@ app.post("/addtocart", (req, res) => {
     [food,restaurant],
     (err,result) =>
     {
-      // console.log("here");
       if (err)
       {
         res.send({message : err})
@@ -591,7 +565,7 @@ app.post("/deletefromcart", (req, res) => {
 
 app.post("/customercart", (req, res) => {
   
-  const customer = 1;
+  const customer = req.body.id;
   
       db.query(
         "SELECT * FROM CART WHERE CUST_ID = ?",
@@ -617,7 +591,7 @@ app.post("/customercart", (req, res) => {
 
 app.post("/deletefromcustomercart", (req, res) => {
   
-  const customer = 1;
+  const customer = req.body.id;
   const foodname = req.body.foodname;
   const quantity = req.body.quantity;
   
@@ -636,43 +610,8 @@ app.post("/deletefromcustomercart", (req, res) => {
       );
 });
 
-
-
-// i think i removed the whole thing from my version -- aashish
-// app.post("/cart", (req, res) => {
-  
-//   const customer = req.body.customer;
-  
-//   // db.connect((error) => {
-//   //   if (!error) {
-//       db.query(
-//         "SELECT FOOD_NAME, FOOD_PRICE, QUANITY FROM CART WHERE CUST_ID = ?",
-//         [customer],
-//         (err, result) => {
-//           if (err) {
-//             res.send({ err: err });
-//           } else {
-//             if (result.length > 0) {
-//               res.send({message: "this is cart"});
-//             } else {
-//               res.send({ message: "Could not display cart" });
-//             }
-//           }
-//         }
-//       );
-//   //   } else {
-//   //     console.log("Connection failed");
-//   //     console.log(error);
-//   //   }
-//   // });
-//   // db.end();
-// });
-
-
-
-
 app.post("/placeorder", (req, res) => {
-  const cust = 1;
+  const cust = req.body.id;
   const today = new Date();
   db.query("INSERT INTO ORDERS (CUST_ID, REST_ID, FOOD_ID, FINAL_PRICE , COUNT_ORDER) SELECT CUST_ID, REST_ID, FOOD_ID, PRICE*QUANTITY, QUANTITY FROM CART WHERE CUST_ID = ?",
   [cust], (err, result) =>{
@@ -702,10 +641,6 @@ app.post("/placeorder", (req, res) => {
 
 });
 
-
-
-
-
 app.post("/voucher", (req, res) => {
   
   // const restaurant = req.body.restaurant;
@@ -715,38 +650,6 @@ app.post("/voucher", (req, res) => {
   //   if (!error) {voucher
       db.query(
         "SELECT PERCENT_DEDUCTION FROM VOUCHER WHERE CODE = ?",
-        [code],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send(result);
-            } else {
-              res.send({ message: "Voucher Invalid" });
-            }
-          }
-        }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
-});
-
-
-
-app.post("/placeorder", (req, res) => {
-  
-  //  const restaurant = req.body.restaurant;
-  
-  
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "INSERT INTO ORDER (CUST_ID, REST_ID, FOOD_ID, FOOD_PRICE , COUNT) VALUES (SELECT CUST_ID, REST_ID, FOOD_ID, FOOD_PRICE, QUANTITY FROM CART); INSERT INTO ORDER (RIDER_ID, TIME, STATUS) VALUES ((SELECT RIDER_ID FROM RIDER WHERE FREE = 1 LIMIT 1) , 1.1.1 , 'DELIVERING') ",
         [code],
         (err, result) => {
           if (err) {

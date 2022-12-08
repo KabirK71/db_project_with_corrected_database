@@ -42,7 +42,7 @@ export const Login = () => {
         if (response.data.type === "customer")
           navigate("/landingpagecustomer");
         else if (response.data.type === "rider")
-          navigate("/landingpagerider");
+          navigate("/landingpageforrider");
         else if (response.data.type === "restaurant")
           navigate("/landingpageforrestaurant");
       } else if (response.data.message === "Incorrect Email or Password") {

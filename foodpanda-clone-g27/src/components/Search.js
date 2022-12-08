@@ -15,10 +15,14 @@ export const Search = () => {
 const obj = {r_name}
 
  */
+  // const restGen = (restName) => {
+  //     navigate('/displaymenuforcustomer', {state: {restName}});
+  // }
+
   const restGen = (restName) => {
-    localStorage.setItem("rest_name",  restName);
-    navigate('/displaymenuforcustomer');
-  }
+    localStorage.setItem("rest_name", restName);
+    navigate("/displaymenuforcustomer");
+  };
 
   async function search (e) {
     e.preventDefault();
@@ -63,6 +67,7 @@ const obj = {r_name}
       <label class="text-xl m-5 font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"> Search Result</label>
       <div class="flex flex-col p-6 mx-auto w-2/3 text-center text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
         {searchResults.map((obj) => {
+          console.log("obj", obj);
           return (
             <div >
               <button class="text-gray-500 text-sm dark:text-gray-400 mb-3 text-center" 
@@ -76,15 +81,9 @@ const obj = {r_name}
   );
 };
 
-// <div className="search" class="flex items-center">
-//   <div class="relative w-full px-2">
-//     <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" name="search" placeholder="Enter a cuisine type or a restaurant name" onChange = {(e)=> {setRestaurant(e.target.value)}}/>
-//   </div>
-//   <button onClick={search} class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm p-2.5 text-center dark:text-white  dark:focus:ring-primary-900">Search</button>
-//       {searchResults.map((obj) => {
-//           return (
-//               <div>
-//                   <h1>{obj}</h1>
-//                   </div>
-//           )
-//       })}
+{/* <button
+class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white hover:bg-gray-50"
+onClick={() => {
+  reqGen(item.REST_NAME);
+}}
+> */}

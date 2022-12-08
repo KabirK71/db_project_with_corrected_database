@@ -14,10 +14,10 @@ export const COrderHistory = () => {
     Axios.post("http://localhost:5000/customerorderhistory", {
       id: id,
     }).then((response) => {
-      console.log(response.data.length);
-      // for (let i = 0; i < response.data.length; i++) {
-      // console.log(i);
-      setOrderHistory((orderHistory) => [...response.data]);
+      console.log(response.data);
+      if (response.data.length > 0) {
+      setOrderHistory(...orderHistory, response.data);
+      }
       // }
     });
   }, []);

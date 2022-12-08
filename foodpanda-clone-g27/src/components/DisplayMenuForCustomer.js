@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 export const DisplayMenuForCustomer = () =>
 {
     const navigate = useNavigate();
+    // const restname2 = useLocation();
+    // console.log(restname2.state.restName);
 
     const restname = localStorage.getItem("rest_name")
-    // console.log(restname)
+    const cust_id = localStorage.getItem("id")
+    console.log(restname)
+
     const [quantity, setQuantity] = useState([]);
     const [food_name, setFoodName] = useState([]);
     const [food_price, setFoodPrice] = useState([]);
@@ -35,6 +39,7 @@ export const DisplayMenuForCustomer = () =>
             quantity: qty,
             food_price: foodprice, 
             restname : restname,
+            id: cust_id,
 
         }).then((response) => {
             console.log(response);
@@ -44,7 +49,6 @@ export const DisplayMenuForCustomer = () =>
     const redirectToCart = () =>
     {
         navigate('/customercart');
-
     }
 
 
