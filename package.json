@@ -16,7 +16,8 @@
   "bugs": {
     "url": "https://github.com/KabirK71/db_project_with_corrected_database/issues"
   },
-  "homepage": "https://github.com/KabirK71/db_project_with_corrected_database#readme"
+  "homepage": "https://github.com/KabirK71/db_project_with_corrected_database#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
-
-
