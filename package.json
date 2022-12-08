@@ -4,7 +4,8 @@
   "description": "Steps: 1. clone repository 2. run <code>npm install</code> 3. create .env file with 1 variables: <code>MYSQL_CON_STRING</code>",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -17,3 +18,5 @@
   },
   "homepage": "https://github.com/KabirK71/db_project_with_corrected_database#readme"
 }
+
+
