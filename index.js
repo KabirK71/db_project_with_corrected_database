@@ -164,9 +164,10 @@ const handleNewRiderSignUp = (email, password, f_name, l_name, phone, res) => {
   );
 };
 
-app.get("/", (res)=>{
+app.get("/", (req,res)=>{
   res.send("server has started");
-})
+});
+
 app.post("/registercust", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
