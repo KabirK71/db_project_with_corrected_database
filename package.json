@@ -6,7 +6,6 @@
     "mysql": "^2.18.1"
   },
   "scripts": {
-    "start": "node index.js",
-    "heroku-postbuild": "cd foodpanda-clone-g27 && npm install && npm run build"
+    "start": "node index.js"
   }
 }
