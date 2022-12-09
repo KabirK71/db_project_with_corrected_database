@@ -936,7 +936,7 @@ app.post("/orderdelivered", (req, res) => {
           if (err) {
             res.send({message: "Unable to Complete Order"});
           } else {
-            db.query("UPDATE RIDER SET FREE = 1, ORDER_ID = NULL WHERE ORDER_ID = ?", 
+            db.query("UPDATE RIDER SET FREE = 1, ORDER_ID = NULL WHERE ORDER_ID = 1", 
             [order], 
             (err, result2) => {
               if (err) {
