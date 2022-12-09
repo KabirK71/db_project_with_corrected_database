@@ -23,7 +23,7 @@ export const ROrderHistory = () => {
     });
   }, []);
 
-  const confirmOrder =(orderID)=>
+  async function confirmOrder (orderID)
   {
     Axios.post("https://dastarkhwan-g27.herokuapp.com/confirmorder", {
       id: rest_id,
@@ -34,9 +34,6 @@ export const ROrderHistory = () => {
         }
         else
         {
-          
-
-          
           alert("Order Confirmed")
           window.location.reload();
         }
