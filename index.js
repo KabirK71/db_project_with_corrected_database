@@ -13,12 +13,12 @@ app.use(cors());
 const db = mysql.createConnection(process.env.MYSQL_CON_STRING);
 
 const handleNewCustSignUp = (email, password, f_name, l_name, phone,street, building, area, city, res) => {            
-          db.query(
-            `CREATE DATABASE IF NOT EXISTS foodpanda`,
-            async (err2, result) => {
-              if (err2) {
-                console.log(err2);
-              } else {
+          // db.query(
+          //   `CREATE DATABASE IF NOT EXISTS foodpanda`,
+          //   async (err2, result) => {
+              // if (err2) {
+              //   console.log(err2);
+              // } else {
                 try {
                   // db.query("USE foodpanda");
                   db.query("SELECT * FROM C_CONTACT WHERE EMAIL = ?",
@@ -60,9 +60,9 @@ const handleNewCustSignUp = (email, password, f_name, l_name, phone,street, buil
                 } catch (err) {
                   console.log(err);
                 }
-              }
-            }
-          );
+              // }
+          //   }
+          // );
 
         // }
       // })
