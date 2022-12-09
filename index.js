@@ -166,6 +166,10 @@ const handleNewRiderSignUp = (email, password, f_name, l_name, phone, res) => {
   );
 };
 
+app.get("/", (req,res)=>{
+  res.send("Server working");
+});
+
 app.post("/registercust", async function (req, res) {
   const email = req.body.email;
   const password = await bcrypt.hash(req.body.password, 10);
