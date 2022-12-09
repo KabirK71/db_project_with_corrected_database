@@ -10,14 +10,14 @@ export const LandingPageRider = () => {
   const navigate = useNavigate();
 
   const logout = () => {
-    navigate("/login");
-    Axios.post("https://dastarkhwan-g27.herokuapp.com/riderlogout", {
-      id: id,
-    }).then((response) => {
-      console.log(response);
-    });
-    
     localStorage.clear();
+    navigate("/login");
+    // Axios.post("https://dastarkhwan-g27.herokuapp.com/riderlogout", {
+    //   id: id,
+    // }).then((response) => {
+    //   console.log(response);
+    // });
+    
   };
 
   async function delivered (orderID) 
