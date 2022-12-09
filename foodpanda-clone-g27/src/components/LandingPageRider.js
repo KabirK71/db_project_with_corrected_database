@@ -23,6 +23,7 @@ export const LandingPageRider = () => {
   async function delivered (orderID) 
   {
     console.log("THE ORDER ID IS: ",orderID);
+    console.log("Rider id is: ",id);
     Axios.post("https://dastarkhwan-g27.herokuapp.com/orderdelivered", {
       id: id,
       orderID: orderID,
@@ -33,7 +34,7 @@ export const LandingPageRider = () => {
       else if (response.data.message === "Order Completed")
       {
         alert("Order Delivered")
-        window.location.reload();
+        // window.location.reload();
       }
     });
   }

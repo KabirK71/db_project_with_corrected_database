@@ -921,17 +921,19 @@ app.post("/confirmorder", (req, res) => {
 app.post("/orderdelivered", (req, res) => {
   
   const order = req.body.orderID;
+  const rider_id = req.body.id;
+  
   console.log("THE ORDER ID I GOT IS: POOP");
   
   db.query(
-    "UPDATE ORDERS SET STATUS_ORDER = 'COMPLETED' WHERE ORDER_ID = 1",
+    "UPDATE ORDERS SET STATUS_ORDER = 'COMPLETED' WHERE ORDER_ID = ?",
     [order],
     (err, result) => {
       if (err) {
         res.send({message: "Unable to Complete Order"});
       } else {
-        db.query("UPDATE RIDER SET FREE = 1, ORDER_ID = NULL WHERE ORDER_ID = 1", 
-        [order], 
+        db.query("UPDATE RIDER SET FREE = 1, ORDER_ID = NULL WHERE RIDER_ID = ?", 
+        [rider_id], 
         (err, result2) => {
           if (err) {
             res.send({ message: "Unable to Complete Order" });
