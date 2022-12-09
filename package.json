@@ -7,6 +7,6 @@
   },
   "scripts": {
     "start": "node index.js",
-    "heroku-postbuild": "cd foodpanda-clone-g27 && npm install && npm run start"
+    "heroku-postbuild": "cd foodpanda-clone-g27 && npm install && npm run build"
   }
 }
