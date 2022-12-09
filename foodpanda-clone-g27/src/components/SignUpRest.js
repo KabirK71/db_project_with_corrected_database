@@ -30,7 +30,8 @@ export const SignUpRest = () => {
   // generate random number between 0 and 5
   const random = Math.floor(Math.random() * 5) + 1;
 
-  const register = () => {
+  async function register (e) {
+    e.preventDefault();
     Axios.post("http://localhost:5000/registerrest", {
     restaurantname: restname,
     email: emailReg,

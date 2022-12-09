@@ -24,7 +24,9 @@ export const DisplayMenuForCustomer = () =>
         Axios.post("http://localhost:5000/displaymenuforcustomer",{
             restname : restname,
         }).then((response) =>{
-            setSearchResults(...searchResults, response.data);
+            if(response.data.length > 0)
+              setSearchResults(...searchResults, response.data);
+              console.log(response.data);
             // setFoodName(response.data.FOOD_NAME);
             // setFoodPrice(response.data.FOOD_PRICE);
         });

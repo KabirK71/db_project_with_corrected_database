@@ -21,7 +21,8 @@ export const SignUpRider = () => {
   const [signupStatus, setSignupStatus] = useState("");
   
 
-  const register = () => {
+  async function register (e) {
+    e.preventDefault()
     Axios.post("http://localhost:5000/registerrider", {
       email:emailReg, 
       password:passwordReg,

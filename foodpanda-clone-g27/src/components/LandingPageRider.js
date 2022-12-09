@@ -11,38 +11,56 @@ export const LandingPageRider = () => {
 
   const logout = () => {
     navigate("/login");
+    Axios.post("http://localhost:5000/riderlogout", {
+      id: id,
+    }).then((response) => {
+      console.log(response);
+    });
+    
     localStorage.clear();
   };
 
-  const DetailChange = () => {
-  };
+  const delivered = (orderID) => 
+  {
+    Axios.post("http://localhost:5000/orderdelivered", {
+      id: id,
+      orderID: orderID,
+    }).then((response) => {
+      if (response.data.message === "Unable to Complete Order") {
+        alert("Unable to Complete Order")
+      }
+      else
+      {
+        alert("Order Delivered")
+      }
+    });
+    window.location.reload();
+  }
+    
 
+  useEffect(() => {
+    Axios.post("http://localhost:5000/landingpageforrider", {
+      id: id,
+    }).then((response) => {
+    console.log(response); 
+    if(response.data.length > 0){
+      setSearchResults(...searchResults, response.data);
+    }
+    });
+  }, []);
 
-  // useEffect(() => {
-  //   Axios.post("http://localhost:5000/landingpageforrider", {
-  //     id: id,
-  //   }).then((response) => {
-  //   console.log(response); 
-  //   if(response.data.length > 0){
-  //     setSearchResults(...searchResults, response.data);
-  //   }
-  //   });
-  // }, []);
-
-  // searchResults = [];
   
-  // const riderList = searchResults.map((item, index) => (
-  //     <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 " key={index}>
-  //       <div class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
-  //         <p href="" class="flex flex-row mb-4 text-md font-semibold">{item.FOOD_NAME}</p>       
-  //         <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Rs: {item.FOOD_PRICE}</p>
-  //         <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Discount: {item.DISCOUNT}%</p>
-  //         <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Description: {item.DESCRIPTION}</p>
-  //       </div>
-  //     </div>
-  // ));
-
-  const riderList = [];
+  const riderList = searchResults.map((item, index) => (
+      <div class="space-y-8 sm:gap-6 xl:gap-10 lg:space-y-0 px-2 pb-5 " key={index}>
+        <div class="w-full flex flex-col p-6 mx-auto text-gray-900 bg-white rounded-lg border border-gray-200 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
+          <p href="" class="flex flex-row mb-4 text-md font-semibold">Order Id: {item.ORDER_ID}</p>       
+          {/* <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Area: {item.FOOD_PRICE}</p> */}
+          <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Status: {item.STATUS_ORDER}</p>
+          {/* <p class="text-gray-500 text-sm dark:text-gray-400 mb-3">Discount: {item.DISCOUNT}%</p> */}
+          <button onClick={()=>delivered(item.ORDER_ID)}>I have delivered this order</button>
+        </div>
+      </div>
+  ));
 
   return (
     <div className="LandingPageForCustomers" class="bg-white dark:bg-gray-900 ">
@@ -61,11 +79,11 @@ export const LandingPageRider = () => {
               >
                 Log Out
               </button>
-              <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" onClick={DetailChange}>
+              {/* <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" onClick={DetailChange}>
                 Change Password
-              </button>
+              </button> */}
             </div>
-            <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+            {/* <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
               <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                 <li>
                   <button
@@ -81,7 +99,7 @@ export const LandingPageRider = () => {
                   </button>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </nav>
       </header>

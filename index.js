@@ -3,8 +3,10 @@ const mysql = require("mysql");
 const cors = require("cors");
 const { response } = require("express");
 require ("dotenv").config()
-const app = express();
+const e = require("express");
+const bcrypt = require("bcrypt");
 
+const app = express();
 app.use(express.json());
 app.use(cors());
 
@@ -18,7 +20,7 @@ const handleNewCustSignUp = (email, password, f_name, l_name, phone,street, buil
                 console.log(err2);
               } else {
                 try {
-                  db.query("USE foodpanda");
+                  // db.query("USE foodpanda");
                   db.query("SELECT * FROM C_CONTACT WHERE EMAIL = ?",
                   [email],
                   (err,result)=>{
@@ -74,7 +76,7 @@ const handleNewRestSignUp = (email, password, restaurantname, phone,street, buil
         console.log(err2);
       } else {
         try {
-          db.query("USE foodpanda");
+          // db.query("USE foodpanda");
           db.query("SELECT * FROM R_CONTACT WHERE EMAIL = ?",
           [email],
           (err,result)=>{
@@ -127,7 +129,7 @@ const handleNewRiderSignUp = (email, password, f_name, l_name, phone, res) => {
         console.log(err2);
       } else {
         try {
-          db.query("USE foodpanda");
+          // db.query("USE foodpanda");
           db.query("SELECT * FROM RD_CONTACT WHERE EMAIL = ?",
           [email],
           (err,result)=>{
@@ -141,7 +143,7 @@ const handleNewRiderSignUp = (email, password, f_name, l_name, phone, res) => {
           else
           {
             db.query(
-              "INSERT INTO RIDER (FIRST_NAME, LAST_NAME) VALUES (?,?);",
+              "INSERT INTO RIDER (FIRST_NAME, LAST_NAME, FREE) VALUES (?,?, 1);",
               [f_name, l_name],
               (err, result) => {
                 console.log(err || result);
@@ -164,13 +166,9 @@ const handleNewRiderSignUp = (email, password, f_name, l_name, phone, res) => {
   );
 };
 
-app.get("/", (req,res)=>{
-  res.send("server has started");
-});
-
-app.post("/registercust", (req, res) => {
+app.post("/registercust", async function (req, res) {
   const email = req.body.email;
-  const password = req.body.password;
+  const password = await bcrypt.hash(req.body.password, 10);
   const f_name = req.body.firstname;
   const l_name = req.body.lastname;
   const phone = req.body.phone
@@ -181,9 +179,9 @@ app.post("/registercust", (req, res) => {
   handleNewCustSignUp(email, password, f_name, l_name, phone,street, building, area, city, res);
 });
 
-app.post("/registerrest", (req, res) => {
+app.post("/registerrest", async function (req, res) {
   const email = req.body.email;
-  const password = req.body.password;
+  const password = await bcrypt.hash(req.body.password, 10);
   const restaurantname = req.body.restaurantname;
   const phone = req.body.phone
   const street = req.body.street;
@@ -199,9 +197,9 @@ app.post("/registerrest", (req, res) => {
   
 });
 
-app.post("/registerrider", (req, res) => {
+app.post("/registerrider", async function (req, res) {
   const email = req.body.email;
-  const password = req.body.password;
+  const password = await bcrypt.hash(req.body.password, 10);
   const f_name = req.body.firstname;
   const l_name = req.body.lastname;
   const phone = req.body.phone
@@ -236,38 +234,72 @@ app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
     db.query(
-      "SELECT * FROM C_CONTACT WHERE EMAIL = ? AND PWD = ?",
-      [email, password],
+      "SELECT * FROM C_CONTACT WHERE EMAIL = ? ",
+      [email],
       (err, result) => {
         if (err) {
           res.send({ message: "User not found" });
         } else {
           if (result.length > 0) {
-            res.send({message: "User logged in", type: "customer", id: result[0].CUST_ID});
+            const queriedpassword = result[0].PWD;
+            bcrypt.compare(password, queriedpassword, (err, pass_check) =>{
+              if (pass_check === false)
+              {
+                res.send({ message:"incorrect password"});
+                
+              }
+              else
+              {
+                res.send({message: "User logged in", type: "customer", id: result[0].CUST_ID});
+              }
+            })
           }
           else
           {
             db.query(
-              "SELECT * FROM R_CONTACT WHERE EMAIL = ? AND PWD = ?",
-              [email, password],
+              "SELECT * FROM R_CONTACT WHERE EMAIL = ?",
+              [email],
               (err, result) => {
                 if (err) {
                   res.send({ err: err });
                 } else {
                   if (result.length > 0) {
-                      res.send({message: "User logged in", type: "restaurant", id: result[0].REST_ID});
+                    const queriedpassword = result[0].PWD;
+                    bcrypt.compare(password, queriedpassword, (err, pass_check) =>{
+                      if (pass_check === false)
+                      {
+                        res.send({ message:"incorrect password"});
+                        
+                      }
+                      else
+                      {
+                        res.send({message: "User logged in", type: "restaurant", id: result[0].REST_ID});
+                      }
+                    })
                     }
                   else
                   {
                     db.query(
-                      "SELECT * FROM RD_CONTACT WHERE EMAIL = ? AND PWD = ?",
-                      [email, password],
+                      "SELECT * FROM RD_CONTACT WHERE EMAIL = ?",
+                      [email],
                       (err, result) => {
                         if (err) {
                           res.send({ err: err });
                         } else {
                           if (result.length > 0) {
-                              res.send({message: "User logged in", type: "rider", id: result[0].RIDER_ID});
+                            const queriedpassword = result[0].PWD;
+                            bcrypt.compare(password, queriedpassword, (err, pass_check) =>{
+                              if (pass_check === false)
+                              {
+                                res.send({ message:"incorrect password"});
+                                
+                              }
+                              else
+                              {
+                                db.query("UPDATE RIDER SET FREE = 1 WHERE RIDER_ID = ?",[result[0].RIDER_ID]);
+                                res.send({message: "User logged in", type: "rider", id: result[0].RIDER_ID});
+                              }
+                            })
                             }
                           else
                           {
@@ -284,6 +316,64 @@ app.post("/login", (req, res) => {
 
       
 });
+
+
+
+
+// app.post("/login", (req, res) => {
+//   const email = req.body.email;
+//   const password = req.body.password;
+//     db.query(
+//       "SELECT * FROM C_CONTACT WHERE EMAIL = ? AND PWD = ?",
+//       [email, password],
+//       (err, result) => {
+//         if (err) {
+//           res.send({ message:"User not found"});
+//         } else {
+//           if (result.length > 0) {
+//             res.send({message: "User logged in", type: "customer", id: result[0].CUST_ID});
+//           }
+//           else
+//           {
+//             db.query(
+//               "SELECT * FROM R_CONTACT WHERE EMAIL = ? AND PWD = ?",
+//               [email, password],
+//               (err, result) => {
+//                 if (err) {
+//                   res.send({ err: err });
+//                 } else {
+//                   if (result.length > 0) {
+//                       res.send({message: "User logged in", type: "restaurant", id: result[0].REST_ID});
+//                     }
+//                   else
+//                   {
+//                     db.query(
+//                       "SELECT * FROM RD_CONTACT WHERE EMAIL = ? AND PWD = ?",
+//                       [email, password],
+//                       (err, result) => {
+//                         if (err) {
+//                           res.send({ err: err });
+//                         } else {
+//                           if (result.length > 0) {
+//                               res.send({message: "User logged in", type: "rider", id: result[0].RIDER_ID});
+//                             }
+//                           else
+//                           {
+//                             res.send({message: "User not found"});
+//                           }
+//                         }});
+
+//                   }
+//                 }});
+
+//           }
+
+//         }});
+
+      
+// });
+
+
 
 app.post("/restsignup", (req, res) => {
   
@@ -331,6 +421,24 @@ app.post("/restsignup", (req, res) => {
   );
 
  
+});
+
+
+
+
+app.post("/riderlogout", (req, res) => {
+  const riderid = req.body.id;
+  db.query(
+    "UPDATE RIDER SET FREE = 1 WHERE RIDER_ID = ?",
+    [riderid],
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      } else {
+        res.send({message: "User logged out"});
+      }
+    }
+  );
 });
 
 
@@ -395,6 +503,29 @@ app.post("/landingpageforrestaurant", (req, res) => {
     }
   )
 
+  app.post("/landingpageforrider", (req, res) => {
+  
+    const rider_id = req.body.id; // token shit here
+    console.log("RIDER ID IS",rider_id);
+        db.query(
+          "SELECT * FROM ORDERS WHERE RIDER_ID = ? AND STATUS_ORDER = 'DELIVERING'",
+          [rider_id],
+          (err, result) => {
+            // console.log(result);
+            if (err) {
+              res.send({ message: "No Orders" });
+            } else {
+              if (result.length > 0) {
+                res.send(result);
+              } else {
+                res.send({ message: "No Orders" });
+              }
+            }
+          }
+        );
+      }
+    )
+
 
 app.post("/displaymenuforcustomer", (req, res) => {
   
@@ -408,7 +539,7 @@ app.post("/displaymenuforcustomer", (req, res) => {
     }
     else
     {
-      console.log(result);
+      // console.log(result);
       res.send(result);
   }
 })
@@ -492,7 +623,6 @@ app.post("/selectedrestaurant", (req, res) => {
       );
 
 });
-
 
 
 app.post("/addtocart", (req, res) => {
@@ -623,7 +753,7 @@ app.post("/placeorder", (req, res) => {
       console.log("success");
     }
   });
-  db.query("UPDATE ORDERS SET TIMENDATE = ?, STATUS_ORDER = 'DELIVERING' WHERE CUST_ID = ?",
+  db.query("UPDATE ORDERS SET TIMENDATE = ?, STATUS_ORDER = 'PENDING' WHERE CUST_ID = ?",
   [today.getHours() + ":" + today.getMinutes(), cust],
   (err,result)=>{
     if(err)
@@ -713,31 +843,52 @@ app.post("/voucher", (req, res) => {
 
 app.post("/confirmorder", (req, res) => {
   
-  const order = req.body.order;
-  
-  // db.connect((error) => {
-  //   if (!error) {
-      db.query(
-        "UPDATE ORDER SET STATUS = 'DELIVERED' WHERE ORDER_ID = ?"
-        [order],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send({ message: "status updated" });
-            } else {
-              res.send({ message: "unable to update status" });
-            }
+  const ordersid = req.body.orderID; 
+
+  db.query("SELECT * FROM RIDER WHERE FREE = 1 LIMIT 1",
+  [],(err,result)=>{
+    if (err)
+    {
+      res.send({message:"Rider not free"})
+    }
+    else
+    {
+      if (result.length>0) 
+      {
+        const rider_id = result[0].RIDER_ID;
+        db.query("UPDATE RIDER SET FREE = 0, ORDER_ID = ? WHERE RIDER_ID = ?", 
+        [ordersid, rider_id], 
+        (err, result2) => 
+        {
+          if (err)
+          {
+            res.send({message:"Rider not free"})
           }
-        }
-      );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+          else
+          {
+            db.query("UPDATE ORDERS SET STATUS_ORDER = 'DELIVERING', RIDER_ID = ? WHERE ORDER_ID = ?", 
+            [rider_id, ordersid],
+            (err, result3)=>
+            {
+              if (err)
+              {
+                res.send({message:"Rider not free"})
+              }
+              else
+              {
+                res.send({message:"Order Confirmed"})
+              }
+            })
+          }
+      })
+      
+    }
+    else
+    {
+      res.send({message:"Rider not free"})
+    }
+    }
+  })
 });
 
 
@@ -745,8 +896,6 @@ app.post("/deliverorder", (req, res) => {
   
   const order = req.body.order;
   
-  // db.connect((error) => {
-  //   if (!error) {
       db.query(
         "UPDATE ORDER SET STATUS = 'COMPLETED' WHERE ORDER_ID = ?"
         [order],
@@ -762,13 +911,50 @@ app.post("/deliverorder", (req, res) => {
           }
         }
       );
-  //   } else {
-  //     console.log("Connection failed");
-  //     console.log(error);
-  //   }
-  // });
-  // db.end();
+
 });
+
+
+
+
+
+
+
+app.post("/orderdelivered", (req, res) => {
+  
+  const order = req.body.orderID;
+  console.log(order);
+  
+      db.query(
+        "UPDATE ORDERS SET STATUS_ORDER = 'COMPLETED' WHERE ORDER_ID = ?",
+        [order],
+        (err, result) => {
+          if (err) {
+            res.send({message: "Unable to Complete Order"});
+          } else {
+            db.query("UPDATE RIDER SET FREE = 1, ORDER_ID = NULL WHERE ORDER_ID = ?", 
+            [order], 
+            (err, result2) => {
+              if (err) {
+                res.send({ message: "Unable to Complete Order" });
+              } else {
+                res.send({ message: "Order Completed"});
+              }
+            });
+          }
+        }
+      );
+
+
+
+});
+
+
+
+
+
+
+
 
 //////////////////////////////////////////////////////////
 // app.post("/customerorderhistory", (req, res) => {
@@ -808,7 +994,7 @@ app.post("/customerorderhistory", (req, res) => {
   db.query(
     "SELECT REST_NAME, STATUS_ORDER FROM RESTAURANT,ORDERS WHERE (RESTAURANT.REST_ID = ORDERS.REST_ID AND CUST_ID = ?)",
     [cust], (err, result)=>{
-      console.log(err||result);
+      // console.log(err||result);
       if (err)
       {
         res.send({REST_ID: "error"});
@@ -822,36 +1008,25 @@ app.post("/customerorderhistory", (req, res) => {
     );
 });
 
-
-
-
-
-
-app.post("/displayordersrestaurant", (req, res) => {
-  
-  const rest = req.body.restaurant;
-
-      db.query(
-        "SELECT * FROM ORDERS WHERE REST_ID = ? AND STATUS_ORDER = 'DELIVERING'",
-        [rest],
-        (err, result) => {
-          console.log(result);
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send(result);
-            } else {
-              res.send({ message: "No orders to show" });
-            }
-          }
-        }
-      );
-
+app.post("/restorderhistory", (req, res) => {
+  const rest = req.body.id;
+  //check if email doesnt exist
+  db.query(
+    "SELECT ORDER_ID, FIRST_NAME, LAST_NAME, STATUS_ORDER FROM CUSTOMER,ORDERS WHERE (CUSTOMER.CUST_ID = ORDERS.CUST_ID AND REST_ID = ?)",
+    [rest], (err, result)=>{
+      // console.log(err||result);
+      if (err)
+      {
+        res.send({message: "No Orders"});
+      }
+      else
+      {
+        // console.log(result);
+        res.send(result);
+      }
+    }
+    );
 });
-
-
-
 
 app.post("/addresschange", (req, res) => {
   const email = req.body.email;
@@ -896,9 +1071,9 @@ app.post("/updatepassword", (req, res) => {
   const email = req.body.email;
   const oldpassword = req.body.oldpassword;
   const newpassword = req.body.newpassword;
-  console.log(email);
-  console.log(oldpassword);
-  console.log(newpassword);
+  // console.log(email);
+  // console.log(oldpassword);
+  // console.log(newpassword);
 
       db.query(
         "SELECT * FROM C_CONTACT WHERE (EMAIL = ? AND PWD = ?)",
@@ -942,9 +1117,6 @@ app.post("/displaymenuforcustomer", (req, res) => {
   }) 
 
 });
-
-
-
 
 
 

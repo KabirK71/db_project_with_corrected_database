@@ -39,12 +39,16 @@ export const Login = () => {
         localStorage.setItem("id", response.data.id);
         localStorage.setItem("email", email);
         setLoginStatus(response.data.message);
+
         if (response.data.type === "customer")
           navigate("/landingpagecustomer");
+
         else if (response.data.type === "rider")
           navigate("/landingpageforrider");
+
         else if (response.data.type === "restaurant")
           navigate("/landingpageforrestaurant");
+
       } else if (response.data.message === "User not found") {
         //need to set state
         setLoginStatus(response.data.message);
@@ -111,21 +115,3 @@ export const Login = () => {
     </section>
   );
 };
-
-//prev login just in case
-{
-  /* // return (
-    //     <div className="Login">
-    //     <h1>Login</h1>
-    //     <label>Email Address</label>
-    //     <input type="email" name="email" placeholder="Email" onChange = {(e)=> {setEmail(e.target.value)}}/>
-    //     <label>Password</label>
-    //     <input type="password" name="password" placeholder="Password" onChange={(e)=> {setPassword(e.target.value)}}/>
-    //     <Link to = {`${loginStatus === 2 &&  "/search" || loginStatus === 0 && "/" }`}>
-    //       <button onClick={login}>Login</button>
-
-    //     </Link>
-        
-    //   </div>
-    // ); */
-}

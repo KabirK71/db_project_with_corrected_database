@@ -24,7 +24,8 @@ import { Help } from './components/Help';
 import Welcome from './components/Welcome';
 import { CustomerCart } from './components/CustomerCart';
 import { DisplayMenuForCustomer } from './components/DisplayMenuForCustomer';
-
+import { ROrderHistory } from './components/ROrderHistory';
+// import {LandingPageRider} from './components/LandingPageRider';
 
 export default function App() {
   return (
@@ -51,6 +52,8 @@ export default function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/displaymenuforcustomer" element= {<DisplayMenuForCustomer/>} />
         <Route path="/customercart" element= {<CustomerCart/>} />
+        <Route path="/restorderhistory" element= {<ROrderHistory/>} />
+        {/* <Route path="/landingpageforrider" element= {<LandingPageRider/>} /> */}
 
       </Routes>
     </Router>

@@ -12,6 +12,7 @@ export const DeleteMenu = () => {
       name: name,
       id: id,
     }).then((response) => {
+      console.log(response.data)
       if (response.data.message === "Item not Deleted") {
         alert("Item not Deleted");
       } 
