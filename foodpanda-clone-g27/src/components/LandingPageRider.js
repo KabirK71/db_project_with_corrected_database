@@ -30,7 +30,7 @@ export const LandingPageRider = () => {
       if (response.data.message === "Unable to Complete Order") {
         alert("Unable to Complete Order")
       }
-      else
+      else if (response.data.message === "Order Completed")
       {
         alert("Order Delivered")
         window.location.reload();

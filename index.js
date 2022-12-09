@@ -896,61 +896,52 @@ app.post("/confirmorder", (req, res) => {
 });
 
 
-app.post("/deliverorder", (req, res) => {
+// app.post("/deliverorder", (req, res) => {
   
-  const order = req.body.order;
+//   const order = req.body.order;
   
-      db.query(
-        "UPDATE ORDER SET STATUS = 'COMPLETED' WHERE ORDER_ID = ?"
-        [order],
-        (err, result) => {
-          if (err) {
-            res.send({ err: err });
-          } else {
-            if (result.length > 0) {
-              res.send({ message: "status updated" });
-            } else {
-              res.send({ message: "unable to update status" });
-            }
-          }
-        }
-      );
+//       db.query(
+//         "UPDATE ORDER SET STATUS = 'COMPLETED' WHERE ORDER_ID = ?"
+//         [order],
+//         (err, result) => {
+//           if (err) {
+//             res.send({ err: err });
+//           } else {
+//             if (result.length > 0) {
+//               res.send({ message: "status updated" });
+//             } else {
+//               res.send({ message: "unable to update status" });
+//             }
+//           }
+//         }
+//       );
 
-});
-
-
-
-
-
-
+// });
 
 app.post("/orderdelivered", (req, res) => {
   
   const order = req.body.orderID;
-  console.log("THE ORDER ID I GOT IS:",order);
+  console.log("THE ORDER ID I GOT IS: POOP");
   
-      db.query(
-        "UPDATE ORDERS SET STATUS_ORDER = 'COMPLETED' WHERE ORDER_ID = 1",
-        [order],
-        (err, result) => {
+  db.query(
+    "UPDATE ORDERS SET STATUS_ORDER = 'COMPLETED' WHERE ORDER_ID = 1",
+    [order],
+    (err, result) => {
+      if (err) {
+        res.send({message: "Unable to Complete Order"});
+      } else {
+        db.query("UPDATE RIDER SET FREE = 1, ORDER_ID = NULL WHERE ORDER_ID = 1", 
+        [order], 
+        (err, result2) => {
           if (err) {
-            res.send({message: "Unable to Complete Order"});
+            res.send({ message: "Unable to Complete Order" });
           } else {
-            db.query("UPDATE RIDER SET FREE = 1, ORDER_ID = NULL WHERE ORDER_ID = 1", 
-            [order], 
-            (err, result2) => {
-              if (err) {
-                res.send({ message: "Unable to Complete Order" });
-              } else {
-                res.send({ message: "Order Completed"});
-              }
-            });
+            res.send({ message: "Order Completed"});
           }
-        }
-      );
-
-
-
+        });
+      }
+    }
+  );
 });
 
 
