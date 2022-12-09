@@ -927,7 +927,7 @@ app.post("/deliverorder", (req, res) => {
 app.post("/orderdelivered", (req, res) => {
   
   const order = req.body.orderID;
-  console.log(order);
+  console.log("THE ORDER ID I GOT IS:",order);
   
       db.query(
         "UPDATE ORDERS SET STATUS_ORDER = 'COMPLETED' WHERE ORDER_ID = ?",
@@ -1071,29 +1071,41 @@ app.post("/addresschange", (req, res) => {
 
 
 
-app.post("/updatepassword", (req, res) => {
+app.post("/updatepassword", async function (req, res) {
   const email = req.body.email;
   const oldpassword = req.body.oldpassword;
-  const newpassword = req.body.newpassword;
+  const newpassword = await bcrypt.hash(req.body.newpassword, 10);
   // console.log(email);
   // console.log(oldpassword);
   // console.log(newpassword);
 
       db.query(
-        "SELECT * FROM C_CONTACT WHERE (EMAIL = ? AND PWD = ?)",
-        [email, oldpassword],
-        (err, result) => {
-          if (err) {
-            res.send({ message: "couldnt update password" });
-          } 
-          if(result.length > 0)
+        "SELECT * FROM C_CONTACT WHERE (EMAIL = ?)",
+        [email],
+        (err, result) => 
+        {
+          if (result.length > 0)
           {
-            db.query("UPDATE C_CONTACT SET PWD = ? WHERE (EMAIL = ? AND PWD = ?)", [newpassword, email, oldpassword]);
-            res.send({message: "password updated"})
-          }
-          else 
-          {
-            res.send({message : "Incorrect Old Password"})
+            const queriedpassword = result[0].PWD;
+            bcrypt.compare(oldpassword, queriedpassword, (err, pass_check) =>{
+              if (pass_check === false)
+              {
+                res.send({message: "wrong password"});
+              }
+              else
+              {
+                db.query("UPDATE C_CONTACT SET PWD = ? WHERE EMAIL = ?" ,[newpassword, email], (err, result)=>{
+                  if (err) {
+                    res.send({message: "couldn't update password"})
+                  }
+                  else
+                  {
+
+                    res.send({message:"password updated"})
+                  }
+                });
+              }
+            })
           }
         }
       );

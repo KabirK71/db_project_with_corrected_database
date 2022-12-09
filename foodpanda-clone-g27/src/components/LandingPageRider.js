@@ -20,8 +20,9 @@ export const LandingPageRider = () => {
     localStorage.clear();
   };
 
-  const delivered = (orderID) => 
+  async function delivered (orderID) 
   {
+    console.log("THE ORDER ID IS: ",orderID);
     Axios.post("https://dastarkhwan-g27.herokuapp.com/orderdelivered", {
       id: id,
       orderID: orderID,
