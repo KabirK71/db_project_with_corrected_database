@@ -69,12 +69,12 @@ const handleNewCustSignUp = (email, password, f_name, l_name, phone,street, buil
 };
 
 const handleNewRestSignUp = (email, password, restaurantname, phone,street, building, area, city, deliveryfee, pricerating, cuisine, rating, res) => {            
-  db.query(
-    `CREATE DATABASE IF NOT EXISTS foodpanda`,
-    async (err2, result) => {
-      if (err2) {
-        console.log(err2);
-      } else {
+  // db.query(
+  //   `CREATE DATABASE IF NOT EXISTS foodpanda`,
+  //   async (err2, result) => {
+  //     if (err2) {
+  //       console.log(err2);
+  //     } else {
         try {
           // db.query("USE foodpanda");
           db.query("SELECT * FROM R_CONTACT WHERE EMAIL = ?",
@@ -116,18 +116,18 @@ const handleNewRestSignUp = (email, password, restaurantname, phone,street, buil
         } catch (err) {
           console.log(err);
         }
-      }
-    }
-  );
+  //     }
+  //   }
+  // );
 };
 
 const handleNewRiderSignUp = (email, password, f_name, l_name, phone, res) => {            
-  db.query(
-    `CREATE DATABASE IF NOT EXISTS foodpanda`,
-    async (err2, result) => {
-      if (err2) {
-        console.log(err2);
-      } else {
+  // db.query(
+  //   `CREATE DATABASE IF NOT EXISTS foodpanda`,
+  //   async (err2, result) => {
+  //     if (err2) {
+  //       console.log(err2);
+  //     } else {
         try {
           // db.query("USE foodpanda");
           db.query("SELECT * FROM RD_CONTACT WHERE EMAIL = ?",
@@ -161,9 +161,9 @@ const handleNewRiderSignUp = (email, password, f_name, l_name, phone, res) => {
         } catch (err) {
           console.log(err);
         }
-      }
-    }
-  );
+  //     }
+  //   }
+  // );
 };
 
 app.get("/", (req,res)=>{
