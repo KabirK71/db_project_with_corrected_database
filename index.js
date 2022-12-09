@@ -930,7 +930,7 @@ app.post("/orderdelivered", (req, res) => {
   console.log("THE ORDER ID I GOT IS:",order);
   
       db.query(
-        "UPDATE ORDERS SET STATUS_ORDER = 'COMPLETED' WHERE ORDER_ID = ?",
+        "UPDATE ORDERS SET STATUS_ORDER = 'COMPLETED' WHERE ORDER_ID = 1",
         [order],
         (err, result) => {
           if (err) {
