@@ -8,7 +8,7 @@ export const DeleteMenu = () => {
   const id = localStorage.getItem("id");
 
   const Delete = () => {
-    Axios.post("http://localhost:5000/deletemenu", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/deletemenu", {
       name: name,
       id: id,
     }).then((response) => {

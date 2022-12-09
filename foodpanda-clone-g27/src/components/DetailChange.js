@@ -10,7 +10,7 @@ export const DetailChange = () => {
 
   async function change (e) {
     e.preventDefault();
-    Axios.post("http://localhost:5000/updatepassword", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/updatepassword", {
       email: email,
       oldpassword: oldpassword,
       newpassword: newpassword,

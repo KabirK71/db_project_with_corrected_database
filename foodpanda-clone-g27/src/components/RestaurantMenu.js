@@ -6,7 +6,7 @@ export const RestaurantMenu = () => {
     const [menuList, setMenuList] = useState([]);
     
     useEffect(() => {
-        Axios.post("http://localhost:5000/restaurantmenu").then((response) => {
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/restaurantmenu").then((response) => {
             console.log(response.data.length);
             // for (let i = 0; i < response.data.length; i++) {
                 // console.log(i);

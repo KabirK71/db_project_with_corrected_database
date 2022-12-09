@@ -26,7 +26,7 @@ const obj = {r_name}
 
   async function search (e) {
     e.preventDefault();
-    Axios.post("http://localhost:5000/search", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/search", {
       restaurant: restaurant,
     }).then((response) => {
       // set the searchResults state to the response.data

@@ -21,7 +21,7 @@ export const DisplayMenuForCustomer = () =>
     const [quan, setQuan] = useState(0);
 
     useEffect (()=>{
-        Axios.post("http://localhost:5000/displaymenuforcustomer",{
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/displaymenuforcustomer",{
             restname : restname,
         }).then((response) =>{
             if(response.data.length > 0)
@@ -36,7 +36,7 @@ export const DisplayMenuForCustomer = () =>
     const callingAddToCart = (foodname, qty, foodprice) =>
     {
 
-        Axios.post("http://localhost:5000/addtocart" , {
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/addtocart" , {
             food_name: foodname,
             quantity: qty,
             food_price: foodprice, 

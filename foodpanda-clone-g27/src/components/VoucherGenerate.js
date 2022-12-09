@@ -9,7 +9,7 @@ export const VoucherGenerate = () => {
     const id = localStorage.getItem("id");
 
     const generate = () => {
-        Axios.post("http://localhost:5000/vouchergenerate", {
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/vouchergenerate", {
         voucher: voucher,
         id: id,
         deduct: deduct,

@@ -12,7 +12,7 @@ export const AddMenu = () => {
   const id = localStorage.getItem("id");
 
   const Add = () => {
-    Axios.post("http://localhost:5000/addmenu", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/addmenu", {
       name: name,
       id: id,
       price: price,

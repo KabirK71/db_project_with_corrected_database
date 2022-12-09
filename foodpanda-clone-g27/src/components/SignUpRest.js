@@ -32,7 +32,7 @@ export const SignUpRest = () => {
 
   async function register (e) {
     e.preventDefault();
-    Axios.post("http://localhost:5000/registerrest", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/registerrest", {
     restaurantname: restname,
     email: emailReg,
     password: passwordReg,

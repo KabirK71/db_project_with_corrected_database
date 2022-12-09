@@ -161,7 +161,7 @@ export const LandingPageCustomer = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.post("http://localhost:5000/landingpageforcustomers").then((response) => {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/landingpageforcustomers").then((response) => {
       console.log(response);
       // console.log("rendered");
       if(response.data.length > 0){

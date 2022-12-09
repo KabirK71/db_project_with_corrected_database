@@ -11,7 +11,7 @@ export const LandingPageRider = () => {
 
   const logout = () => {
     navigate("/login");
-    Axios.post("http://localhost:5000/riderlogout", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/riderlogout", {
       id: id,
     }).then((response) => {
       console.log(response);
@@ -22,7 +22,7 @@ export const LandingPageRider = () => {
 
   const delivered = (orderID) => 
   {
-    Axios.post("http://localhost:5000/orderdelivered", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/orderdelivered", {
       id: id,
       orderID: orderID,
     }).then((response) => {
@@ -39,7 +39,7 @@ export const LandingPageRider = () => {
     
 
   useEffect(() => {
-    Axios.post("http://localhost:5000/landingpageforrider", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/landingpageforrider", {
       id: id,
     }).then((response) => {
     console.log(response); 

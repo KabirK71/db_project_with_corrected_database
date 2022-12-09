@@ -11,7 +11,7 @@ export const COrderHistory = () => {
 
   useEffect(() => {
     console.log(id);
-    Axios.post("http://localhost:5000/customerorderhistory", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/customerorderhistory", {
       id: id,
     }).then((response) => {
       console.log(response.data);

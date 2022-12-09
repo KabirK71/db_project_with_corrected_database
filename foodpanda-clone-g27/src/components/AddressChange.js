@@ -14,7 +14,7 @@ export const AddressChange = () => {
     
     async function change (e) {
         e.preventDefault();
-        Axios.post("http://localhost:5000/addresschange", {
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/addresschange", {
         // cust_id: cust_id,
         email: email,
         city: city,

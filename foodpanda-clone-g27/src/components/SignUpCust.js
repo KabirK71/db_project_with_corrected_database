@@ -29,7 +29,7 @@ export const SignUpCust = () => {
     // Promise.resolve(hashPassword(passwordReg))
     // .then((hashPwd) => {
       // setPasswordReg(hashPwd);
-      Axios.post("http://localhost:5000/registercust", {
+      Axios.post("https://dastarkhwan-g27.herokuapp.com/registercust", {
         email:emailReg, 
         password:passwordReg,
         firstname: firstName,

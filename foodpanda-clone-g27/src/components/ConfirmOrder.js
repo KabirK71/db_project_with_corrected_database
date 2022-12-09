@@ -6,7 +6,7 @@ export const ConfirmOrder = () => {
     const [order, setOrder] = useState("");
 // i think yahan pe useEffect bhi hoga
     const confirm = () => {
-        Axios.post("http://localhost:5000/confirmorder", {
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/confirmorder", {
         order: order,
         }).then((response) => {
         console.log(response);

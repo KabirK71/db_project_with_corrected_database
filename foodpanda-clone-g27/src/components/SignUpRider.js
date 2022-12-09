@@ -23,7 +23,7 @@ export const SignUpRider = () => {
 
   async function register (e) {
     e.preventDefault()
-    Axios.post("http://localhost:5000/registerrider", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/registerrider", {
       email:emailReg, 
       password:passwordReg,
       firstname: firstName,

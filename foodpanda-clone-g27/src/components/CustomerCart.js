@@ -14,7 +14,7 @@ export const CustomerCart = () =>
     }
     const placeorder = () =>
     {
-        Axios.post("http://localhost:5000/placeorder",{
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/placeorder",{
             id: cust_id,
         }).then((response) =>{
             console.log(response)
@@ -29,7 +29,7 @@ export const CustomerCart = () =>
 
 
     useEffect (()=>{
-        Axios.post("http://localhost:5000/customercart",{ 
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/customercart",{ 
             id: cust_id,
         }).then((response) =>{
             console.log(response)
@@ -40,7 +40,7 @@ export const CustomerCart = () =>
 
     const deletefromcart = (foodname, quantity)=>
     {
-        Axios.post("http://localhost:5000/deletefromcustomercart", 
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/deletefromcustomercart", 
         {
             id: cust_id,
             foodname:foodname,

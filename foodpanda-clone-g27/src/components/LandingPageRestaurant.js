@@ -34,7 +34,7 @@ export const LandingPageRestaurant = () => {
   };
 
   useEffect(() => {
-    Axios.post("http://localhost:5000/landingpageforrestaurant", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/landingpageforrestaurant", {
       id: id,
     }).then((response) => {
     console.log(response); 

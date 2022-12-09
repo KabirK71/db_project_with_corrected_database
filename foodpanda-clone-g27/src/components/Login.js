@@ -30,7 +30,7 @@ export const Login = () => {
     // .then((hashPwd) => {
     //   setPassword(hashPwd);0
     //   console.log("THE HASHED PWD IS",hashPwd);
-    Axios.post("http://localhost:5000/login", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/login", {
       email: email,
       password: password,
     }).then((response) => {

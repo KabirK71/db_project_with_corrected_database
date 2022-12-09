@@ -13,7 +13,7 @@ export const ROrderHistory = () => {
 
   useEffect(() => {
     console.log(rest_id);
-    Axios.post("http://localhost:5000/restorderhistory", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/restorderhistory", {
       id: rest_id,
     }).then((response) => {
       console.log(response.data);
@@ -25,7 +25,7 @@ export const ROrderHistory = () => {
 
   const confirmOrder =(orderID)=>
   {
-    Axios.post("http://localhost:5000/confirmorder", {
+    Axios.post("https://dastarkhwan-g27.herokuapp.com/confirmorder", {
       id: rest_id,
       orderID: orderID,
       }).then((response) => {

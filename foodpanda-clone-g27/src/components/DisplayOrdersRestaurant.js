@@ -6,7 +6,7 @@ export const DisplayOrdersRestaurant = () => {
     const [searchResults, setSearchResults] = useState([]);
 
     useEffect(() => {
-        Axios.post("http://localhost:5000/displayordersrestaurant").then((response) => {
+        Axios.post("https://dastarkhwan-g27.herokuapp.com/displayordersrestaurant").then((response) => {
             console.log(response);
             console.log("rendered");
             setSearchResults([...searchResults, response.data[0].FOOD_ID]);
