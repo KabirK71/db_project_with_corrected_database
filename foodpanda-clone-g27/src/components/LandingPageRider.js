@@ -34,7 +34,7 @@ export const LandingPageRider = () => {
       else if (response.data.message === "Order Completed")
       {
         alert("Order Delivered")
-        // window.location.reload();
+        window.location.reload();
       }
     });
   }
